@@ -96,12 +96,12 @@ public class Arty_GLEventListener implements GLEventListener {
   
   public void loweredArms() {
     stopAnimation();
-    robotArm.loweredArms();
+
   }
    
   public void raisedArms() {
     stopAnimation();
-    robotArm.raisedArms();
+
   }
   
   // ***************************************************
@@ -117,8 +117,6 @@ public class Arty_GLEventListener implements GLEventListener {
   private SGNode robot;
   private RobotArm robotArm;
 
-  private float xPosition = 0;
-  private TransformNode translateX, robotMoveTranslate, leftArmRotate, rightArmRotate;
   
   private void initialise(GL3 gl) {
     createRandomNumbers();
