@@ -14,6 +14,12 @@ public class TransformNode extends SGNode {
   public void setTransform(Mat4 m) {
     transform = new Mat4(m);
   }
+
+  // New Method
+  public void updateTransform(Mat4 m) {
+    transform = Mat4.multiply(transform, m);
+    this.setTransform(transform);
+  }
   
   protected void update(Mat4 t) {
     worldTransform = t;
@@ -28,7 +34,7 @@ public class TransformNode extends SGNode {
     if (inFull) {
       System.out.println("worldTransform");
       System.out.println(worldTransform);
-      System.out.println("transform node:");
+      System.out.println("rotate node:");
       System.out.println(transform);
     }
     for (int i=0; i<children.size(); i++) {

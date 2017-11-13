@@ -59,19 +59,6 @@ public class Arty_GLEventListener implements GLEventListener {
     return System.currentTimeMillis()/1000.0;
   }
 
-  // ***************************************************
-  /* An array of random numbers
-   */ 
-  
-  private int NUM_RANDOMS = 1000;
-  private float[] randoms;
-  
-  private void createRandomNumbers() {
-    randoms = new float[NUM_RANDOMS];
-    for (int i=0; i<NUM_RANDOMS; ++i) {
-      randoms[i] = (float)Math.random();
-    }
-  }
   
   // ***************************************************
   /* INTERACTION
@@ -114,12 +101,12 @@ public class Arty_GLEventListener implements GLEventListener {
   private Mat4 perspective;
   private Mesh floor;
   private Light light;
-  private SGNode robot;
-  private RobotArm robotArm;
+  private SGNode robotSceneGraph;
+  private RobotHand robotHand;
 
   
   private void initialise(GL3 gl) {
-    createRandomNumbers();
+
     int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/marble.jpg");
 
     floor = new TwoTriangles(gl, textureId0);
@@ -131,9 +118,9 @@ public class Arty_GLEventListener implements GLEventListener {
     floor.setLight(light);
     floor.setCamera(camera);
 
-    robotArm = new RobotArm();
-    robot = robotArm.buildSceneGraph(gl, light, camera);
-    //robot.print(0, false);
+    robotHand = new RobotHand();
+    robotSceneGraph = robotHand.buildSceneGraph(gl, light, camera);
+    //robotSceneGraph.print(0, false);
     //System.exit(0);
   }
  
@@ -148,8 +135,8 @@ public class Arty_GLEventListener implements GLEventListener {
 
     double elapsedTime = getSeconds()-startTime;
     
-    if (animation) robotArm.update(elapsedTime);
-    robot.draw(gl);
+    if (animation) robotHand.update(elapsedTime);
+    robotSceneGraph.draw(gl);
   }
     
   private void updatePerspectiveMatrices() {
@@ -158,13 +145,13 @@ public class Arty_GLEventListener implements GLEventListener {
     light.setPerspective(perspective);
     floor.setPerspective(perspective);
 
-    robotArm.updatePerspectiveMatrices(perspective);
+    robotHand.updatePerspectiveMatrices(perspective);
   }
   
   private void disposeMeshes(GL3 gl) {
     light.dispose(gl);
     floor.dispose(gl);
-    robotArm.disposeMeshes(gl);
+    robotHand.disposeMeshes(gl);
   }
 
   
