@@ -1,7 +1,9 @@
-import Models.Camera;
-import Models.Light;
-import Models.Mesh;
-import Models.TwoTriangles;
+import lights.DirectionalLight;
+import lights.Light;
+import lights.PointLight;
+import models.Camera;
+import models.Mesh;
+import models.TwoTriangles;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -9,7 +11,9 @@ import com.jogamp.opengl.GLEventListener;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
-  
+
+import java.util.ArrayList;
+
 public class Arty_GLEventListener implements GLEventListener {
   
   private static final boolean DISPLAY_SHADERS = false;
@@ -107,7 +111,8 @@ public class Arty_GLEventListener implements GLEventListener {
   private Camera camera;
   private Mat4 perspective;
   private Mesh floor;
-  private Light light;
+  private PointLight pointLight;
+  private DirectionalLight dirLight;
   private SGNode robotSceneGraph;
   private RobotHand robotHand;
 
@@ -119,13 +124,21 @@ public class Arty_GLEventListener implements GLEventListener {
     floor = new TwoTriangles(gl, textureId0);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));   
 
-    light = new Light(gl);
-    light.setCamera(camera);
-    
-    floor.setLight(light);
+    pointLight = new PointLight(gl, 1.0f,  0.09f, 0.032f);
+    pointLight.setCamera(camera);
+
+    dirLight = new DirectionalLight(gl);
+
+    dirLight.setCamera(camera);
+
+    ArrayList<Light> lights = new ArrayList<>();
+    lights.add(dirLight);
+    lights.add(pointLight);
+
+    floor.setLights(lights);
     floor.setCamera(camera);
 
-    robotHand = new RobotHand(gl, light, camera);
+    robotHand = new RobotHand(gl, lights, camera);
     robotSceneGraph = robotHand.getSceneGraph();
     //robotSceneGraph.print(0, false);
     //System.exit(0);
@@ -135,8 +148,11 @@ public class Arty_GLEventListener implements GLEventListener {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     updatePerspectiveMatrices();
     
-    light.setPosition(getLightPosition());  // changing light position each frame
-    light.render(gl);
+    pointLight.setPosition(getLightPosition());  // changing pointLight position each frame
+    pointLight.render(gl);
+
+
+    dirLight.render(gl);
 
     floor.render(gl);
 
@@ -149,20 +165,22 @@ public class Arty_GLEventListener implements GLEventListener {
   private void updatePerspectiveMatrices() {
     // needs to be changed if user resizes the window
     perspective = Mat4Transform.perspective(45, aspect);
-    light.setPerspective(perspective);
+    pointLight.setPerspective(perspective);
+    dirLight.setPerspective(perspective);
     floor.setPerspective(perspective);
 
     robotHand.updatePerspectiveMatrices(perspective);
   }
   
   private void disposeMeshes(GL3 gl) {
-    light.dispose(gl);
+    pointLight.dispose(gl);
+    dirLight.dispose(gl);
     floor.dispose(gl);
     robotHand.disposeMeshes(gl);
   }
 
   
-  // The light's postion is continually being changed, so needs to be calculated for each frame.
+  // The pointLight's postion is continually being changed, so needs to be calculated for each frame.
   private Vec3 getLightPosition() {
     double elapsedTime = getSeconds()-startTime;
     float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));

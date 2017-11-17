@@ -18,6 +18,6 @@ void main() {
   vec3 norm = normalize(normal);
   ourNormal = mat3(normalMatrix) * norm;
 
-  //ourNormal = vec3((normalMatrix) * vec4(normal,1.0));  
+  //ourNormal = vec3((normalMatrix) * vec4(normal,1.0));
   ourTexCoord = texCoord;
 }

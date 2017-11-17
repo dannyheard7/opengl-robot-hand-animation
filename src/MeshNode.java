@@ -1,4 +1,4 @@
-import Models.Mesh;
+import models.Mesh;
 import com.jogamp.opengl.*;
 
 public class MeshNode extends SGNode {

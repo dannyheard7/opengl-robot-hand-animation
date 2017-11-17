@@ -1,11 +1,16 @@
-import Models.Camera;
-import Models.Cube;
-import Models.Light;
-import Models.Mesh;
+import lights.DirectionalLight;
+import lights.PointLight;
+import lights.SpotLight;
+import models.Camera;
+import models.Cube;
+import lights.Light;
+import models.Mesh;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+
+import java.util.ArrayList;
 
 public class RobotHand {
 
@@ -14,19 +19,20 @@ public class RobotHand {
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
 
-    public RobotHand(GL3 gl, Light light, Camera camera) {
+    // TODO: Need a better way of dealing with lights
+    public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
 
         cube = new Cube(gl, textureId3, textureId4);
-        cube.setLight(light);
+        cube.setLights(lights);
         cube.setCamera(camera);
 
-        indexFinger = new RobotFinger(gl, light, camera);
-        middleFinger = new RobotFinger(gl, light, camera);
-        ringFinger = new RobotFinger(gl, light, camera);
-        pinkyFinger = new RobotFinger(gl, light, camera);
-        thumb = new RobotFinger(gl, light, camera);
+        indexFinger = new RobotFinger(gl, lights, camera);
+        middleFinger = new RobotFinger(gl, lights, camera);
+        ringFinger = new RobotFinger(gl, lights, camera);
+        pinkyFinger = new RobotFinger(gl, lights, camera);
+        thumb = new RobotFinger(gl, lights, camera);
     }
 
     public SGNode getSceneGraph() {
@@ -45,7 +51,7 @@ public class RobotHand {
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode armTransform = new TransformNode("arm rotate", m);
-        MeshNode armShape = new MeshNode("Models.Cube(arm)", cube);
+        MeshNode armShape = new MeshNode("models.Cube(arm)", cube);
 
         NameNode hand = new NameNode("hand");
         m = Mat4Transform.translate(0, armHeight, 0);
@@ -53,7 +59,7 @@ public class RobotHand {
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode handTransform = new TransformNode("hand rotate", m);
-        MeshNode handShape = new MeshNode("Models.Cube(hand)", cube);
+        MeshNode handShape = new MeshNode("models.Cube(hand)", cube);
 
         float dist = 2.5f  / 3;
 

@@ -1,14 +1,17 @@
-package Models;
+package lights;
 
-import Models.Material;
+import models.Camera;
+import models.Material;
+import models.Shader;
 import gmaths.*;
 import java.nio.*;
 import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
   
-public class Light {
+abstract public class Light {
   
-  private Material material;
+  protected Material material;
+
   private Vec3 position;
   private Mat4 model;
   private Shader shader;
@@ -22,7 +25,7 @@ public class Light {
     material.setSpecular(1.0f, 1.0f, 1.0f);
     position = new Vec3(3f,2f,1f);
     model = new Mat4(1);
-    shader = new Shader(gl, "shaders/vs_light_01.glsl", "shaders/fs_light_01.glsl");
+    shader = new Shader(gl, "shaders/vs_light.glsl", "shaders/fs_light.glsl");
     fillBuffers(gl);
   }
   

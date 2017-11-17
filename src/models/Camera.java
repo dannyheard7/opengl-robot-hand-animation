@@ -1,8 +1,6 @@
-package Models;
+package models;
 
 import gmaths.*;
-import java.awt.event.*;
-import com.jogamp.opengl.awt.GLCanvas;
 
 public class Camera {
   

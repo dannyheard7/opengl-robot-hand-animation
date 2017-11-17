@@ -1,8 +1,11 @@
-package Models;
+package models;
 
-import Models.Mesh;
 import gmaths.*;
 import com.jogamp.opengl.*;
+import lights.DirectionalLight;
+import lights.Light;
+import lights.PointLight;
+import lights.SpotLight;
 
 public class TwoTriangles extends Mesh {
   
@@ -15,9 +18,9 @@ public class TwoTriangles extends Mesh {
     this.textureId = textureId;
     material.setAmbient(0.5f, 0.5f, 0.5f);
     material.setDiffuse(0.7f, 0.7f, 0.7f);
-    material.setSpecular(0.2f, 0.2f, 0.2f);
-    material.setShininess(16.0f);
-    shader = new Shader(gl, "shaders/vs_tt_05.glsl", "shaders/fs_tt_05.glsl");
+    material.setSpecular(0f, 0f, 0f); // TODO: this will have specular highlights but through texturing
+    material.setShininess(1f);
+    shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt.glsl");
     fillBuffers(gl);
   }
 
@@ -30,19 +33,15 @@ public class TwoTriangles extends Mesh {
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
     
     shader.setVec3(gl, "viewPos", camera.getPosition());
-
-    shader.setVec3(gl, "light.position", light.getPosition());
-    shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
-    shader.setVec3(gl, "light.diffuse", light.getMaterial().getDiffuse());
-    shader.setVec3(gl, "light.specular", light.getMaterial().getSpecular());
+    this.renderLights(gl);
 
     shader.setVec3(gl, "material.ambient", material.getAmbient());
     shader.setVec3(gl, "material.diffuse", material.getDiffuse());
     shader.setVec3(gl, "material.specular", material.getSpecular());
     shader.setFloat(gl, "material.shininess", material.getShininess());
-    
+
     shader.setInt(gl, "first_texture", 0);
-      
+
     gl.glActiveTexture(GL.GL_TEXTURE0);
     gl.glBindTexture(GL.GL_TEXTURE_2D, textureId[0]);
     
@@ -50,7 +49,7 @@ public class TwoTriangles extends Mesh {
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
     gl.glBindVertexArray(0);
   }
-  
+
   public void dispose(GL3 gl) {
     super.dispose(gl);
     gl.glDeleteBuffers(1, textureId, 0);

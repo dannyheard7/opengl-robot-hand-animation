@@ -1,8 +1,11 @@
-package Models;
+package models;
 
-import Models.Mesh;
 import gmaths.*;
 import com.jogamp.opengl.*;
+import lights.DirectionalLight;
+import lights.Light;
+import lights.PointLight;
+import lights.SpotLight;
 
 public class Sphere extends Mesh {
 
@@ -20,7 +23,7 @@ public class Sphere extends Mesh {
     material.setDiffuse(1.0f, 0.5f, 0.31f);
     material.setSpecular(0.5f, 0.5f, 0.5f);
     material.setShininess(32.0f);
-    shader = new Shader(gl, "shaders/vs_cube_04.glsl", "shaders/fs_cube_04.glsl");
+    shader = new Shader(gl, "shaders/vs_cube.glsl", "shaders/fs_cube.glsl");
     fillBuffers(gl);
   }
   
@@ -33,15 +36,8 @@ public class Sphere extends Mesh {
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
     
     shader.setVec3(gl, "viewPos", camera.getPosition());
+    this.renderLights(gl);
 
-    shader.setVec3(gl, "light.position", light.getPosition());
-    shader.setVec3(gl, "light.ambient", light.getMaterial().getAmbient());
-    shader.setVec3(gl, "light.diffuse", light.getMaterial().getDiffuse());
-    shader.setVec3(gl, "light.specular", light.getMaterial().getSpecular());
-
-    //shader.setVec3(gl, "material.ambient", material.getAmbient());
-    //shader.setVec3(gl, "material.diffuse", material.getDiffuse());
-    //shader.setVec3(gl, "material.specular", material.getSpecular());
     shader.setFloat(gl, "material.shininess", material.getShininess());
 
     shader.setInt(gl, "material.diffuse", 0);  // be careful to match these with GL_TEXTURE0 and GL_TEXTURE1
@@ -56,6 +52,7 @@ public class Sphere extends Mesh {
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
     gl.glBindVertexArray(0);
   }
+
   
   public void dispose(GL3 gl) {
     super.dispose(gl);

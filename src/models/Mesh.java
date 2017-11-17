@@ -1,9 +1,17 @@
-package Models;
+package models;
 
-import gmaths.*;
-import java.nio.*;
-import com.jogamp.common.nio.*;
-import com.jogamp.opengl.*;
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL3;
+import gmaths.Mat4;
+import lights.DirectionalLight;
+import lights.Light;
+import lights.PointLight;
+import lights.SpotLight;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
+import java.util.ArrayList;
 
 public abstract class Mesh {
   
@@ -23,7 +31,7 @@ public abstract class Mesh {
   
   protected Camera camera;
   protected Mat4 perspective;
-  protected Light light;
+  protected ArrayList<Light> lights;
   
   public Mesh(GL3 gl) {
     material = new Material();
@@ -42,8 +50,8 @@ public abstract class Mesh {
     this.perspective = perspective;
   }
   
-  public void setLight(Light light) {
-    this.light = light;
+  public void setLights(ArrayList<Light> lights) {
+    this.lights = lights;
   }
   
   public void dispose(GL3 gl) {
@@ -95,11 +103,49 @@ public abstract class Mesh {
   public abstract void render(GL3 gl, Mat4 model); 
   
   public void render(GL3 gl) {
+
+
     render(gl, model);
+
+
+  }
+
+  protected void renderLights(GL3 gl) {
+    for (Light light : lights) {
+
+
+      if (light instanceof DirectionalLight) {
+        DirectionalLight dirLight = (DirectionalLight) light;
+
+        shader.setVec3(gl, "dirLight.direction", dirLight.getDirection());
+        shader.setVec3(gl, "dirLight.ambient", light.getMaterial().getAmbient());
+        shader.setVec3(gl, "dirLight.diffuse", light.getMaterial().getDiffuse());
+        shader.setVec3(gl, "dirLight.specular", light.getMaterial().getSpecular());
+      } else if (light instanceof PointLight) {
+        // Either do this or have one big light class? Might make more sense even though some variables are unused
+        PointLight pointLight = (PointLight) light;
+
+        shader.setVec3(gl, "pointLights[0].position", pointLight.getPosition());
+        shader.setVec3(gl, "pointLights[0].ambient", pointLight.getMaterial().getAmbient());
+        shader.setVec3(gl, "pointLights[0].diffuse", pointLight.getMaterial().getDiffuse());
+        shader.setVec3(gl, "pointLights[0].specular", pointLight.getMaterial().getSpecular());
+
+        shader.setFloat(gl, "pointLights[0].constant", pointLight.getConstant());
+        shader.setFloat(gl, "pointLights[0].linear", pointLight.getLinear());
+        shader.setFloat(gl, "pointLights[0].quadratic", pointLight.getQuadratic());
+      } else if (light instanceof SpotLight) {
+        SpotLight spotLight = (SpotLight) light;
+
+        shader.setVec3(gl, "spotLight.position", spotLight.getPosition());
+        shader.setVec3(gl, "spotLight.ambient", spotLight.getMaterial().getAmbient());
+        shader.setVec3(gl, "spotLight.diffuse", spotLight.getMaterial().getDiffuse());
+        shader.setVec3(gl, "spotLight.specular", spotLight.getMaterial().getSpecular());
+      }
+    }
   }
   
-  //public abstract void render(GL3 gl, Models.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
-  /*public void render(GL3 gl, Models.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
+  //public abstract void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
+  /*public void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
     setViewPosition(viewPosition);
     setView(view);
     setPerspective(perspective);

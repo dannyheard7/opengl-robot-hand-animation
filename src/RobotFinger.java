@@ -1,11 +1,16 @@
-import Models.Camera;
-import Models.Light;
-import Models.Mesh;
-import Models.Sphere;
+import lights.DirectionalLight;
+import lights.PointLight;
+import lights.SpotLight;
+import models.Camera;
+import lights.Light;
+import models.Mesh;
+import models.Sphere;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+
+import java.util.ArrayList;
 
 public class RobotFinger {
 
@@ -15,12 +20,12 @@ public class RobotFinger {
     float sectionHeight, fingerWidth, fingerDepth;
 
 
-    public RobotFinger(GL3 gl, Light light, Camera camera) {
+    public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
 
         sphere = new Sphere(gl, textureId3, textureId4);
-        sphere.setLight(light);
+        sphere.setLights(lights);
         sphere.setCamera(camera);
     }
 
@@ -45,7 +50,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerBottomTransform = new TransformNode("finger bottom rotate", m);
-        MeshNode fingerBottomShape = new MeshNode("Models.Cube(finger bottom)", sphere);
+        MeshNode fingerBottomShape = new MeshNode("models.Cube(finger bottom)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerMiddleTranslate = new TransformNode("finger middle translate", m);
@@ -53,7 +58,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerMiddleTransform = new TransformNode("finger middle rotate", m);
-        MeshNode fingerMiddleShape = new MeshNode("Models.Cube(finger middle)", sphere);
+        MeshNode fingerMiddleShape = new MeshNode("models.Cube(finger middle)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerTopTranslate = new TransformNode("finger top translate", m);
@@ -61,7 +66,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerTopTransform = new TransformNode("finger top rotate", m);
-        MeshNode fingerTopShape = new MeshNode("Models.Cube(finger top)", sphere);
+        MeshNode fingerTopShape = new MeshNode("models.Cube(finger top)", sphere);
 
         finger.addChild(fingerTransform);
             fingerTransform.addChild(fingerBottom);
@@ -86,8 +91,6 @@ public class RobotFinger {
 
     public void curled(float angle) {
         // If angle is less than 90, then spheres will not be touching
-
-
         double val = Math.abs(Math.sin(Math.toRadians(angle)));
 
         float diff = 0;

@@ -1,4 +1,4 @@
-package Models;
+package models;
 
 import gmaths.*;
 import java.io.IOException;
