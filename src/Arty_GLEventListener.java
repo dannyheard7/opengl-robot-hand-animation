@@ -80,15 +80,18 @@ public class Arty_GLEventListener implements GLEventListener {
     savedTime = elapsedTime;
   }
 
+  public void letterD() {
+    robotHand.positionD();
+
+  }
   
-  public void loweredArms() {
-    stopAnimation();
+  public void letterA() {
+    robotHand.positionA();
 
   }
    
-  public void raisedArms() {
-    stopAnimation();
-
+  public void letterY() {
+    robotHand.positionY();
   }
   
   // ***************************************************
@@ -118,8 +121,8 @@ public class Arty_GLEventListener implements GLEventListener {
     floor.setLight(light);
     floor.setCamera(camera);
 
-    robotHand = new RobotHand();
-    robotSceneGraph = robotHand.buildSceneGraph(gl, light, camera);
+    robotHand = new RobotHand(gl, light, camera);
+    robotSceneGraph = robotHand.getSceneGraph();
     //robotSceneGraph.print(0, false);
     //System.exit(0);
   }

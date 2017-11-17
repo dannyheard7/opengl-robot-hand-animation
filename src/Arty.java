@@ -56,7 +56,7 @@ public class Arty extends JFrame implements ActionListener {
       b = new JButton("A");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("N");
+      b = new JButton("Y");
       b.addActionListener(this);
       p.add(b);
     this.add(p, BorderLayout.SOUTH);
@@ -92,13 +92,13 @@ public class Arty extends JFrame implements ActionListener {
       //glEventListener.incXPosition();
     }
     else if (e.getActionCommand().equalsIgnoreCase("D")) {
-      //glEventListener.decXPosition();
+      glEventListener.letterD();
     }
     else if (e.getActionCommand().equalsIgnoreCase("A")) {
-      glEventListener.loweredArms();
+      glEventListener.letterA();
     }
-    else if (e.getActionCommand().equalsIgnoreCase("N")) {
-      glEventListener.raisedArms();
+    else if (e.getActionCommand().equalsIgnoreCase("Y")) {
+      glEventListener.letterY();
     }
     else if(e.getActionCommand().equalsIgnoreCase("quit"))
       System.exit(0);
