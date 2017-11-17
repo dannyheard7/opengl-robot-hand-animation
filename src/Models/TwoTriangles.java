@@ -1,6 +1,7 @@
+package Models;
+
+import Models.Mesh;
 import gmaths.*;
-import java.nio.*;
-import com.jogamp.common.nio.*;
 import com.jogamp.opengl.*;
 
 public class TwoTriangles extends Mesh {
@@ -16,7 +17,7 @@ public class TwoTriangles extends Mesh {
     material.setDiffuse(0.7f, 0.7f, 0.7f);
     material.setSpecular(0.2f, 0.2f, 0.2f);
     material.setShininess(16.0f);
-    shader = new Shader(gl, "shaders/vs_tt_05.txt", "shaders/fs_tt_05.txt");
+    shader = new Shader(gl, "shaders/vs_tt_05.glsl", "shaders/fs_tt_05.glsl");
     fillBuffers(gl);
   }
 

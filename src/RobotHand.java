@@ -1,3 +1,7 @@
+import Models.Camera;
+import Models.Cube;
+import Models.Light;
+import Models.Mesh;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
@@ -41,8 +45,7 @@ public class RobotHand {
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode armTransform = new TransformNode("arm rotate", m);
-        MeshNode armShape = new MeshNode("Cube(arm)", cube);
-
+        MeshNode armShape = new MeshNode("Models.Cube(arm)", cube);
 
         NameNode hand = new NameNode("hand");
         m = Mat4Transform.translate(0, armHeight, 0);
@@ -50,7 +53,7 @@ public class RobotHand {
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode handTransform = new TransformNode("hand rotate", m);
-        MeshNode handShape = new MeshNode("Cube(hand)", cube);
+        MeshNode handShape = new MeshNode("Models.Cube(hand)", cube);
 
         float dist = 2.5f  / 3;
 

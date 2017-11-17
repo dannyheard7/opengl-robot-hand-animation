@@ -1,3 +1,7 @@
+import Models.Camera;
+import Models.Light;
+import Models.Mesh;
+import Models.TwoTriangles;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;

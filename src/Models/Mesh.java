@@ -1,3 +1,5 @@
+package Models;
+
 import gmaths.*;
 import java.nio.*;
 import com.jogamp.common.nio.*;
@@ -96,8 +98,8 @@ public abstract class Mesh {
     render(gl, model);
   }
   
-  //public abstract void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
-  /*public void render(GL3 gl, Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
+  //public abstract void render(GL3 gl, Models.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
+  /*public void render(GL3 gl, Models.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
     setViewPosition(viewPosition);
     setView(view);
     setPerspective(perspective);

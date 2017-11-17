@@ -1,7 +1,9 @@
+package Models;
+
 import gmaths.*;
 
  /**
- * This class stores the Material properties for a Mesh
+ * This class stores the Models.Material properties for a Models.Mesh
  *
  * @author    Dr Steve Maddock
  * @version   1.0 (15/10/2017)

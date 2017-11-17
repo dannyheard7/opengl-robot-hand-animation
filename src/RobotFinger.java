@@ -1,3 +1,7 @@
+import Models.Camera;
+import Models.Light;
+import Models.Mesh;
+import Models.Sphere;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
@@ -41,7 +45,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerBottomTransform = new TransformNode("finger bottom rotate", m);
-        MeshNode fingerBottomShape = new MeshNode("Cube(finger bottom)", sphere);
+        MeshNode fingerBottomShape = new MeshNode("Models.Cube(finger bottom)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerMiddleTranslate = new TransformNode("finger middle translate", m);
@@ -49,7 +53,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerMiddleTransform = new TransformNode("finger middle rotate", m);
-        MeshNode fingerMiddleShape = new MeshNode("Cube(finger middle)", sphere);
+        MeshNode fingerMiddleShape = new MeshNode("Models.Cube(finger middle)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerTopTranslate = new TransformNode("finger top translate", m);
@@ -57,7 +61,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerTopTransform = new TransformNode("finger top rotate", m);
-        MeshNode fingerTopShape = new MeshNode("Cube(finger top)", sphere);
+        MeshNode fingerTopShape = new MeshNode("Models.Cube(finger top)", sphere);
 
         finger.addChild(fingerTransform);
             fingerTransform.addChild(fingerBottom);

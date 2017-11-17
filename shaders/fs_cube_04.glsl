@@ -8,6 +8,15 @@ out vec4 fragColor;
  
 uniform vec3 viewPos;
 
+struct DirLight {
+    vec3 direction;
+
+    vec3 ambient;
+    vec3 diffuse;
+    vec3 specular;
+};
+uniform DirLight dirLight;
+
 struct Light {
   vec3 position;
   vec3 ambient;
@@ -15,7 +24,8 @@ struct Light {
   vec3 specular;
 };
 
-uniform Light light;  
+uniform Light light;
+
 
 struct Material {
   sampler2D diffuse;
