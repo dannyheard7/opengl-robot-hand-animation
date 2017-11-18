@@ -13,6 +13,7 @@ import gmaths.Mat4Transform;
 import gmaths.Vec3;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Arty_GLEventListener implements GLEventListener {
   
@@ -128,12 +129,9 @@ public class Arty_GLEventListener implements GLEventListener {
     pointLight.setCamera(camera);
 
     dirLight = new DirectionalLight(gl);
-
     dirLight.setCamera(camera);
 
-    ArrayList<Light> lights = new ArrayList<>();
-    lights.add(dirLight);
-    lights.add(pointLight);
+    ArrayList<Light> lights = new ArrayList<>(Arrays.asList(dirLight, pointLight));
 
     floor.setLights(lights);
     floor.setCamera(camera);
@@ -150,8 +148,6 @@ public class Arty_GLEventListener implements GLEventListener {
     
     pointLight.setPosition(getLightPosition());  // changing pointLight position each frame
     pointLight.render(gl);
-
-
     dirLight.render(gl);
 
     floor.render(gl);
