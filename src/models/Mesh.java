@@ -111,9 +111,9 @@ public abstract class Mesh {
   }
 
   protected void renderLights(GL3 gl) {
+    int numPointLights = 0;
+
     for (Light light : lights) {
-
-
       if (light instanceof DirectionalLight) {
         DirectionalLight dirLight = (DirectionalLight) light;
 
@@ -125,14 +125,17 @@ public abstract class Mesh {
         // Either do this or have one big light class? Might make more sense even though some variables are unused
         PointLight pointLight = (PointLight) light;
 
-        shader.setVec3(gl, "pointLights[0].position", pointLight.getPosition());
-        shader.setVec3(gl, "pointLights[0].ambient", pointLight.getMaterial().getAmbient());
-        shader.setVec3(gl, "pointLights[0].diffuse", pointLight.getMaterial().getDiffuse());
-        shader.setVec3(gl, "pointLights[0].specular", pointLight.getMaterial().getSpecular());
+        String name = "pointLights[" + numPointLights + "]";
+        shader.setVec3(gl, name + ".position", pointLight.getPosition());
+        shader.setVec3(gl, name + ".ambient", pointLight.getMaterial().getAmbient());
+        shader.setVec3(gl, name + ".diffuse", pointLight.getMaterial().getDiffuse());
+        shader.setVec3(gl, name + ".specular", pointLight.getMaterial().getSpecular());
 
-        shader.setFloat(gl, "pointLights[0].constant", pointLight.getConstant());
-        shader.setFloat(gl, "pointLights[0].linear", pointLight.getLinear());
-        shader.setFloat(gl, "pointLights[0].quadratic", pointLight.getQuadratic());
+        shader.setFloat(gl, name + ".constant", pointLight.getConstant());
+        shader.setFloat(gl, name + ".linear", pointLight.getLinear());
+        shader.setFloat(gl, name + ".quadratic", pointLight.getQuadratic());
+
+        numPointLights += 1;
       } else if (light instanceof SpotLight) {
         SpotLight spotLight = (SpotLight) light;
 

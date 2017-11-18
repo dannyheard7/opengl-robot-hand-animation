@@ -1,6 +1,3 @@
-import lights.DirectionalLight;
-import lights.PointLight;
-import lights.SpotLight;
 import models.Camera;
 import models.Cube;
 import lights.Light;
@@ -9,6 +6,10 @@ import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+import scenegraph.MeshNode;
+import scenegraph.NameNode;
+import scenegraph.SGNode;
+import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
@@ -19,7 +20,6 @@ public class RobotHand {
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
 
-    // TODO: Need a better way of dealing with lights
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
@@ -33,9 +33,11 @@ public class RobotHand {
         ringFinger = new RobotFinger(gl, lights, camera);
         pinkyFinger = new RobotFinger(gl, lights, camera);
         thumb = new RobotFinger(gl, lights, camera);
+
+        this.setupSceneGraph();
     }
 
-    public SGNode getSceneGraph() {
+    private void setupSceneGraph() {
         float armHeight = 3f;
         float armScale = 1.25f;
 
@@ -43,9 +45,9 @@ public class RobotHand {
         float handWidth = 3f;
         float handScale = 1f;
 
-        robot = new NameNode("root");
+        robot = new NameNode("robot arm");
 
-        TransformNode robotMoveTranslate = new TransformNode("robot translate", Mat4Transform.translate(0,0,0));
+        TransformNode robotArmTranslate = new TransformNode("robot translate", Mat4Transform.translate(0,0,0));
 
         NameNode arm = new NameNode("arm");
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
@@ -56,9 +58,10 @@ public class RobotHand {
         NameNode hand = new NameNode("hand");
         m = Mat4Transform.translate(0, armHeight, 0);
         TransformNode handTranslate = new TransformNode("hand translate", m);
+
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode handTransform = new TransformNode("hand rotate", m);
+        TransformNode handTransform = new TransformNode("hand transform", m);
         MeshNode handShape = new MeshNode("models.Cube(hand)", cube);
 
         float dist = 2.5f  / 3;
@@ -69,6 +72,7 @@ public class RobotHand {
         Vec3 pinkyPos = new Vec3(-1.25f, handHeight, 0f);
         Vec3 thumbPos = new Vec3(1.5f, handHeight / 2, 0f);
 
+        // TODO: Cleanup like lamp and robot hand
         SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, 1f);
         SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, 1.25f);
         SGNode ringFingerNode = ringFinger.buildSceneGraph("Ring Finger", ringPos, 1f);
@@ -77,25 +81,26 @@ public class RobotHand {
 
         thumb.translateFinger(Mat4Transform.rotateAroundZ(-90));
 
-        robot.addChild(robotMoveTranslate);
-            robotMoveTranslate.addChild(arm);
-                arm.addChild(armTransform);
-                    armTransform.addChild(armShape);
-                arm.addChild(handTranslate);
-                    handTranslate.addChild(hand);
-                        hand.addChild(handTransform);
-                            handTransform.addChild(handShape);
-                        hand.addChild(thumbNode);
-                        hand.addChild(indexFingerNode);
-                        hand.addChild(middleFingerNode);
-                        hand.addChild(ringFingerNode);
-                        hand.addChild(pinkyFingerNode);
+        robot.addChild(robotArmTranslate);
+        robotArmTranslate.addChild(arm);
+        arm.addChild(armTransform);
+        armTransform.addChild(armShape);
+        arm.addChild(handTranslate);
+        handTranslate.addChild(hand);
+        hand.addChild(handTransform);
+        handTransform.addChild(handShape);
+        hand.addChild(thumbNode);
+        hand.addChild(indexFingerNode);
+        hand.addChild(middleFingerNode);
+        hand.addChild(ringFingerNode);
+        hand.addChild(pinkyFingerNode);
 
         robot.update();
-
-        return robot;
     }
 
+    public void render(GL3 gl) {
+        robot.draw(gl);
+    }
 
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

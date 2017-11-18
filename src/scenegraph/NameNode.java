@@ -1,5 +1,6 @@
-import gmaths.*;
-import com.jogamp.opengl.*;
+package scenegraph;
+
+import scenegraph.SGNode;
 
 public class NameNode extends SGNode {
   

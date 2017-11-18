@@ -6,6 +6,10 @@ import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+import scenegraph.MeshNode;
+import scenegraph.NameNode;
+import scenegraph.SGNode;
+import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
@@ -40,29 +44,31 @@ public class RobotFinger {
         this.sectionHeight = sectionHeight;
 
         Mat4 m = Mat4Transform.translate(pos);
-        fingerJoint = new TransformNode("finger translate", m);
+        fingerJoint = new TransformNode("finger joint", m);
 
         NameNode fingerBottom = new NameNode("finger bottom");
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode fingerBottomTransform = new TransformNode("finger bottom rotate", m);
-        MeshNode fingerBottomShape = new MeshNode("models.Cube(finger bottom)", sphere);
+        TransformNode fingerBottomTransform = new TransformNode("finger bottom transform", m);
+        MeshNode fingerBottomShape = new MeshNode("models.Sphere(finger bottom)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
-        fingerMiddleJoint = new TransformNode("finger middle translate", m);
+        fingerMiddleJoint = new TransformNode("middle joint", m);
+
         NameNode fingerMiddle = new NameNode("finger middle");
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode fingerMiddleTransform = new TransformNode("finger middle rotate", m);
-        MeshNode fingerMiddleShape = new MeshNode("models.Cube(finger middle)", sphere);
+        TransformNode fingerMiddleTransform = new TransformNode("finger middle transform", m);
+        MeshNode fingerMiddleShape = new MeshNode("models.Sphere(finger middle)", sphere);
 
         m = Mat4Transform.translate(0,  sectionHeight, 0);
-        fingerTopJoint = new TransformNode("finger top translate", m);
+        fingerTopJoint = new TransformNode("finger top joint", m);
+
         NameNode fingerTop = new NameNode("finger top");
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode fingerTopTransform = new TransformNode("finger top rotate", m);
-        MeshNode fingerTopShape = new MeshNode("models.Cube(finger top)", sphere);
+        TransformNode fingerTopTransform = new TransformNode("finger top transform", m);
+        MeshNode fingerTopShape = new MeshNode("models.Sphere(finger top)", sphere);
 
         finger.addChild(fingerJoint);
             fingerJoint.addChild(fingerBottom);

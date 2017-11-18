@@ -11,6 +11,7 @@ import com.jogamp.opengl.GLEventListener;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+import scenegraph.SGNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -112,32 +113,37 @@ public class Arty_GLEventListener implements GLEventListener {
   private Camera camera;
   private Mat4 perspective;
   private Mesh floor;
-  private PointLight pointLight;
   private DirectionalLight dirLight;
-  private SGNode robotSceneGraph;
+
   private RobotHand robotHand;
+  private Lamp lamp, lamp2;
 
   
   private void initialise(GL3 gl) {
-
+    // TODO Move this into a scene class?
     int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/marble.jpg");
 
     floor = new TwoTriangles(gl, textureId0);
-    floor.setModelMatrix(Mat4Transform.scale(16,1,16));   
-
-    pointLight = new PointLight(gl, 1.0f,  0.09f, 0.032f);
-    pointLight.setCamera(camera);
+    floor.setModelMatrix(Mat4Transform.scale(16,1,16));
 
     dirLight = new DirectionalLight(gl);
     dirLight.setCamera(camera);
 
-    ArrayList<Light> lights = new ArrayList<>(Arrays.asList(dirLight, pointLight));
+    ArrayList<Light> lights = new ArrayList<>(Arrays.asList(dirLight));
+
+    lamp = new Lamp(gl, lights, camera);
+    lamp.setPosition(new Vec3(-4, 0, 6));
+    lights.add(lamp.getLight());
+
+    lamp2 = new Lamp(gl, lights, camera);
+    lamp2.setPosition(new Vec3(4, 0, -6));
+    lights.add(lamp2.getLight());
 
     floor.setLights(lights);
     floor.setCamera(camera);
 
     robotHand = new RobotHand(gl, lights, camera);
-    robotSceneGraph = robotHand.getSceneGraph();
+
     //robotSceneGraph.print(0, false);
     //System.exit(0);
   }
@@ -145,45 +151,41 @@ public class Arty_GLEventListener implements GLEventListener {
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
     updatePerspectiveMatrices();
-    
-    pointLight.setPosition(getLightPosition());  // changing pointLight position each frame
-    pointLight.render(gl);
+
+    double elapsedTime = getSeconds()-startTime;
+
     dirLight.render(gl);
+
+    lamp.render(gl);
+    lamp2.render(gl);
 
     floor.render(gl);
 
-    double elapsedTime = getSeconds()-startTime;
-    
     if (animation) robotHand.update(elapsedTime);
-    robotSceneGraph.draw(gl);
+    robotHand.render(gl);
+
   }
     
   private void updatePerspectiveMatrices() {
     // needs to be changed if user resizes the window
     perspective = Mat4Transform.perspective(45, aspect);
-    pointLight.setPerspective(perspective);
     dirLight.setPerspective(perspective);
     floor.setPerspective(perspective);
 
     robotHand.updatePerspectiveMatrices(perspective);
+    lamp.updatePerspectiveMatrices(perspective);
+    lamp2.updatePerspectiveMatrices(perspective);
+
   }
   
   private void disposeMeshes(GL3 gl) {
-    pointLight.dispose(gl);
     dirLight.dispose(gl);
     floor.dispose(gl);
+
     robotHand.disposeMeshes(gl);
+    lamp.disposeMeshes(gl);
+    lamp2.disposeMeshes(gl);
   }
 
-  
-  // The pointLight's postion is continually being changed, so needs to be calculated for each frame.
-  private Vec3 getLightPosition() {
-    double elapsedTime = getSeconds()-startTime;
-    float x = 5.0f*(float)(Math.sin(Math.toRadians(elapsedTime*50)));
-    float y = 2.7f;
-    float z = 5.0f*(float)(Math.cos(Math.toRadians(elapsedTime*50)));
-    return new Vec3(x,y,z);   
-    //return new Vec3(5f,3.4f,5f);
-  }
   
 }
