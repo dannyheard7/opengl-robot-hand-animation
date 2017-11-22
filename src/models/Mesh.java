@@ -103,11 +103,7 @@ public abstract class Mesh {
   public abstract void render(GL3 gl, Mat4 model); 
   
   public void render(GL3 gl) {
-
-
     render(gl, model);
-
-
   }
 
   protected void renderLights(GL3 gl) {
@@ -144,6 +140,14 @@ public abstract class Mesh {
         shader.setVec3(gl, "spotLight.ambient", spotLight.getMaterial().getAmbient());
         shader.setVec3(gl, "spotLight.diffuse", spotLight.getMaterial().getDiffuse());
         shader.setVec3(gl, "spotLight.specular", spotLight.getMaterial().getSpecular());
+
+        shader.setFloat(gl, "spotLight.constant", spotLight.getConstant());
+        shader.setFloat(gl, "spotLight.linear", spotLight.getLinear());
+        shader.setFloat(gl, "spotLight.quadratic", spotLight.getQuadratic());
+
+        shader.setVec3(gl, "spotLight.direction", spotLight.getDirection());
+        shader.setFloat(gl, "spotLight.cutOff", spotLight.getCutOff());
+        shader.setFloat(gl, "spotLight.outerCutOff", spotLight.getOuterCutOff());
       }
     }
   }

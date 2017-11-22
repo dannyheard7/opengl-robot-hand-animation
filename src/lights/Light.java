@@ -76,6 +76,17 @@ abstract public class Light {
     gl.glBindVertexArray(0);
   }
 
+  public void render(GL3 gl, Mat4 model) {
+    Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(camera.getViewMatrix(), model));
+
+    shader.use(gl);
+    shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
+
+    gl.glBindVertexArray(vertexArrayId[0]);
+    gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
+    gl.glBindVertexArray(0);
+  }
+
   public void dispose(GL3 gl) {
     gl.glDeleteBuffers(1, vertexBufferId, 0);
     gl.glDeleteVertexArrays(1, vertexArrayId, 0);

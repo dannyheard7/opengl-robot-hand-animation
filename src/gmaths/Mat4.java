@@ -59,6 +59,19 @@ public class Mat4 {   // row column formulation
     return a;
   }
 
+  /* Code to multiply transform matrix by position matrix to get final position */
+  public static Vec3 multiply(Mat4 a, Vec3 b) {
+    Vec3 result = new Vec3();
+
+    for (int i=0; i<4; ++i) {
+      result.x += a.values[0][i] * b.x;
+      result.y += a.values[1][i] * b.y;
+      result.z += a.values[2][i] * b.z;
+    }
+
+    return result;
+  }
+
   public static Mat4 multiply(Mat4 a, Mat4 b) {
     Mat4 result = new Mat4();
     for (int i=0; i<4; ++i) {

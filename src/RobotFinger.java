@@ -16,6 +16,7 @@ import java.util.ArrayList;
 public class RobotFinger {
 
     private Mesh sphere;
+    private NameNode finger;
     private TransformNode fingerBottomJoint, fingerMiddleJoint, fingerTopJoint;
     private Mat4 fingerBottomJointPosition, fingerMiddleJointPosition, fingerTopJointPosition;
 
@@ -38,7 +39,7 @@ public class RobotFinger {
 
     // TODO: Have rotation? for thumb
     public SGNode buildSceneGraph(String name, Vec3 position, Mat4 rotation, float sectionHeight) {
-        NameNode finger = new NameNode(name);
+        finger = new NameNode(name);
 
         this.fingerWidth = 0.75f;
         this.fingerDepth = 1f;
@@ -94,12 +95,16 @@ public class RobotFinger {
     public void transformFinger(Mat4 m) {
         m = Mat4.multiply(fingerBottomJointPosition, m);
         fingerBottomJoint.setTransform(m);
+
+        finger.update();
     }
 
     public void reset() {
         fingerBottomJoint.setTransform(fingerBottomJointPosition);
         fingerMiddleJoint.setTransform(fingerMiddleJointPosition);
         fingerTopJoint.setTransform(fingerTopJointPosition);
+
+        finger.update();
     }
 
     public void curled(float angle) {
@@ -125,6 +130,8 @@ public class RobotFinger {
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
 
         fingerTopJoint.setTransform(m);
+
+        finger.update();
     }
 
 

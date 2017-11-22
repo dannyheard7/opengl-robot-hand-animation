@@ -47,12 +47,12 @@ public class RobotHand {
 
         robot = new NameNode("robot arm");
 
-        TransformNode robotArmTranslate = new TransformNode("robot translate", Mat4Transform.translate(0,0,0));
+        TransformNode robotArmTranslate = new TransformNode("arm translate", Mat4Transform.translate(0,0,0));
 
         NameNode arm = new NameNode("arm");
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode armTransform = new TransformNode("arm rotate", m);
+        TransformNode armTransform = new TransformNode("arm transform", m);
         MeshNode armShape = new MeshNode("models.Cube(arm)", cube);
 
         NameNode hand = new NameNode("hand");
@@ -98,7 +98,6 @@ public class RobotHand {
     }
 
     public void render(GL3 gl) {
-
         robot.draw(gl);
     }
 
@@ -123,14 +122,12 @@ public class RobotHand {
         ringFinger.reset();
         pinkyFinger.reset();
         thumb.reset();
-
-        robot.update(); // Should this be here? or should it be in robotfinger?
     }
 
     public void positionD() {
-        thumb.curled(70);
+        this.neutralPosition();
 
-        indexFinger.reset();
+        thumb.curled(70);
 
         // Need a way to be able to curl and transform a finger without one resetting the other
         middleFinger.curled(90);
@@ -149,8 +146,6 @@ public class RobotHand {
         middleFinger.transformFinger(m);
         ringFinger.transformFinger(m);
         pinkyFinger.transformFinger(m);
-
-        robot.update();
     }
 
     public void positionA() {
@@ -167,14 +162,11 @@ public class RobotHand {
         middleFinger.curled(90);
         ringFinger.curled(90);
         pinkyFinger.curled(90);
-
-        robot.update();
-
     }
 
     public void positionY() {
         this.neutralPosition();
-        
+
         // Pinky Finger rotated away & thumb towards other fingers
         Mat4 m = Mat4Transform.rotateAroundZ(20);
 
@@ -185,8 +177,6 @@ public class RobotHand {
         indexFinger.curled(90);
         middleFinger.curled(90);
         ringFinger.curled(90);
-
-        robot.update();
     }
 
 

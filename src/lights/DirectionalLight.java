@@ -5,7 +5,9 @@ import gmaths.Vec3;
 
 public class DirectionalLight extends Light {
 
-    public DirectionalLight(GL3 gl) {
+    private Vec3 direction;
+
+    public DirectionalLight(GL3 gl, Vec3 direction) {
         super(gl);
 
         material.setAmbient(0.5f, 0.5f, 0.5f);
@@ -13,11 +15,16 @@ public class DirectionalLight extends Light {
         material.setSpecular(0, 0, 0);
 
         this.setPosition(new Vec3(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
+
+        this.direction = direction;
     }
 
 
     public Vec3 getDirection() {
-        return new Vec3(-0.2f, -1.0f, -0.3f);
+        return direction;
     }
 
+    public void setDirection(Vec3 direction) {
+        this.direction = direction;
+    }
 }

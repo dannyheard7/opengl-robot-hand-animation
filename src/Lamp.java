@@ -8,10 +8,7 @@ import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import models.Sphere;
-import scenegraph.MeshNode;
-import scenegraph.NameNode;
-import scenegraph.SGNode;
-import scenegraph.TransformNode;
+import scenegraph.*;
 
 import java.util.ArrayList;
 
@@ -24,9 +21,8 @@ public class Lamp {
     private TransformNode lampTranslate;
     private PointLight light;
 
-
     public Lamp(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        light = new PointLight(gl, 1.0f, 0.14f,0.07f);
+        light = new PointLight(gl, 1.0f, 0.07f,0.017f);
         light.setCamera(camera);
         lights.add(light); // Shallow copying, might this cause problems?
 
@@ -57,7 +53,13 @@ public class Lamp {
         TransformNode tubeTransform = new TransformNode("tube transform", m);
         MeshNode tubeShape = new MeshNode("models.Sphere(tube)", sphere);
 
-        light.setPosition(0, 5f, 0);
+        // TODO: lamp scene graph like robot finger
+
+        NameNode lightNameNode = new NameNode("light");
+        m = Mat4Transform.translate(0, 5.25f, 0f);
+        m = Mat4.multiply(m, Mat4Transform.scale(0.5f, 0.5f, 0.5f));
+        TransformNode lightTransform = new TransformNode("light transform", m);
+        LightNode lightShape = new LightNode("light.PointLight(lamp)", light);
 
         lamp.addChild(lampTranslate);
             lampTranslate.addChild(base);
@@ -66,19 +68,19 @@ public class Lamp {
                 base.addChild(tube);
                     tube.addChild(tubeTransform);
                         tubeTransform.addChild(tubeShape);
+                    tube.addChild(lightNameNode);
+                        lightNameNode.addChild(lightTransform);
+                            lightTransform.addChild(lightShape);
 
         lamp.update();
     }
 
     public void setPosition(Vec3 position) {
         lampTranslate.setTransform(Mat4Transform.translate(position));
-        light.setPosition(position.x, 5f, position.z);
         lamp.update();
     }
 
     public void render(GL3 gl) {
-        light.render(gl);
-
         lamp.draw(gl);
     }
 

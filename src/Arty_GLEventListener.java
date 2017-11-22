@@ -126,18 +126,16 @@ public class Arty_GLEventListener implements GLEventListener {
     floor = new TwoTriangles(gl, textureId0);
     floor.setModelMatrix(Mat4Transform.scale(16,1,16));
 
-    dirLight = new DirectionalLight(gl);
+    dirLight = new DirectionalLight(gl,  new Vec3(-0.2f, -1.0f, -0.3f));
     dirLight.setCamera(camera);
 
     ArrayList<Light> lights = new ArrayList<>(Arrays.asList(dirLight));
 
     lamp = new Lamp(gl, lights, camera);
     lamp.setPosition(new Vec3(-4, 0, 6));
-    //lights.add(lamp.getLight());
 
     lamp2 = new Lamp(gl, lights, camera);
     lamp2.setPosition(new Vec3(4, 0, -6));
-    //lights.add(lamp2.getLight());
 
     floor.setLights(lights);
     floor.setCamera(camera);
