@@ -28,7 +28,7 @@ public class Lamp {
     public Lamp(GL3 gl, ArrayList<Light> lights, Camera camera) {
         light = new PointLight(gl, 1.0f, 0.14f,0.07f);
         light.setCamera(camera);
-        lights.add(light);
+        lights.add(light); // Shallow copying, might this cause problems?
 
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");

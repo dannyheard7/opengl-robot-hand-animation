@@ -133,11 +133,11 @@ public class Arty_GLEventListener implements GLEventListener {
 
     lamp = new Lamp(gl, lights, camera);
     lamp.setPosition(new Vec3(-4, 0, 6));
-    lights.add(lamp.getLight());
+    //lights.add(lamp.getLight());
 
     lamp2 = new Lamp(gl, lights, camera);
     lamp2.setPosition(new Vec3(4, 0, -6));
-    lights.add(lamp2.getLight());
+    //lights.add(lamp2.getLight());
 
     floor.setLights(lights);
     floor.setCamera(camera);
@@ -187,5 +187,8 @@ public class Arty_GLEventListener implements GLEventListener {
     lamp2.disposeMeshes(gl);
   }
 
-  
+
+  public void resetHand() {
+    robotHand.neutralPosition();
+  }
 }

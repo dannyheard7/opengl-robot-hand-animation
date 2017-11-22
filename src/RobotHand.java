@@ -71,15 +71,14 @@ public class RobotHand {
         Vec3 ringPos = new Vec3((-1.25f+dist), handHeight, 0f);
         Vec3 pinkyPos = new Vec3(-1.25f, handHeight, 0f);
         Vec3 thumbPos = new Vec3(1.5f, handHeight / 2, 0f);
+        Mat4 fingerRoate = Mat4Transform.rotateAroundX(0);
+        Mat4 thumbRotate = Mat4Transform.rotateAroundZ(-90);
 
-        // TODO: Cleanup like lamp and robot hand
-        SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, 1f);
-        SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, 1.25f);
-        SGNode ringFingerNode = ringFinger.buildSceneGraph("Ring Finger", ringPos, 1f);
-        SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, 0.75f);
-        SGNode thumbNode = thumb.buildSceneGraph("Thumb Finger", thumbPos, 0.75f);
-
-        thumb.translateFinger(Mat4Transform.rotateAroundZ(-90));
+        SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, fingerRoate, 1f);
+        SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, fingerRoate, 1.25f);
+        SGNode ringFingerNode = ringFinger.buildSceneGraph("Ring Finger", ringPos, fingerRoate,1f);
+        SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, fingerRoate,0.75f);
+        SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, thumbRotate, 0.75f);
 
         robot.addChild(robotArmTranslate);
         robotArmTranslate.addChild(arm);
@@ -99,6 +98,7 @@ public class RobotHand {
     }
 
     public void render(GL3 gl) {
+
         robot.draw(gl);
     }
 
@@ -118,41 +118,49 @@ public class RobotHand {
     }
 
     public void neutralPosition() {
+        indexFinger.reset();
+        middleFinger.reset();
+        ringFinger.reset();
+        pinkyFinger.reset();
+        thumb.reset();
 
+        robot.update(); // Should this be here? or should it be in robotfinger?
     }
 
-    // TODO: these positions are relative so need to reset before each
-    // i.e Get finger positions, apply these transformations, instead of updating just set transformations to each piece
     public void positionD() {
-        thumb.curled(50);
+        thumb.curled(70);
 
+        indexFinger.reset();
+
+        // Need a way to be able to curl and transform a finger without one resetting the other
         middleFinger.curled(90);
         ringFinger.curled(90);
         pinkyFinger.curled(90);
 
-        Mat4 m = Mat4Transform.rotateAroundZ(5);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(18));
+        Mat4 m = Mat4Transform.rotateAroundZ(-10);
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(28));
         m = Mat4.multiply(m, Mat4Transform.translate(0, -0.05f, 0.20f));
-        thumb.translateFinger(m);
+        thumb.transformFinger(m);
 
         // Need to move all fingers towards thumb slightly
-        m = Mat4Transform.rotateAroundX(-40);
+        m = Mat4Transform.rotateAroundX(30);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundY(15));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, 0));
 
-        middleFinger.translateFinger(m);
-        ringFinger.translateFinger(m);
-        pinkyFinger.translateFinger(m);
+        middleFinger.transformFinger(m);
+        ringFinger.transformFinger(m);
+        pinkyFinger.transformFinger(m);
 
         robot.update();
     }
 
     public void positionA() {
+        this.neutralPosition();
+
         // thumb rotated upwards
         Mat4 m = Mat4Transform.rotateAroundZ(90);
-        m = Mat4.multiply(m, Mat4Transform.translate(0.25f, 0, 0));
+        m = Mat4.multiply(m, Mat4Transform.translate(0.75f / 2, 0, 0));
 
-        thumb.translateFinger(m);
+        thumb.transformFinger(m);
 
         // Index, Middle, Ring & pinky folded
         indexFinger.curled(90);
@@ -165,11 +173,13 @@ public class RobotHand {
     }
 
     public void positionY() {
+        this.neutralPosition();
+        
         // Pinky Finger rotated away & thumb towards other fingers
         Mat4 m = Mat4Transform.rotateAroundZ(20);
 
-        pinkyFinger.translateFinger(m);
-        thumb.translateFinger(m);
+        pinkyFinger.transformFinger(m);
+        thumb.transformFinger(m);
 
         // Ring, Middle & index folded
         indexFinger.curled(90);

@@ -90,7 +90,7 @@ public class Arty extends JFrame implements ActionListener {
       glEventListener.stopAnimation();
     }
     else if (e.getActionCommand().equalsIgnoreCase("reset")) {
-      //glEventListener.incXPosition();
+      glEventListener.resetHand();
     }
     else if (e.getActionCommand().equalsIgnoreCase("D")) {
       glEventListener.letterD();

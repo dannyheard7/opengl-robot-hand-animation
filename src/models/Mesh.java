@@ -126,6 +126,7 @@ public abstract class Mesh {
         PointLight pointLight = (PointLight) light;
 
         String name = "pointLights[" + numPointLights + "]";
+
         shader.setVec3(gl, name + ".position", pointLight.getPosition());
         shader.setVec3(gl, name + ".ambient", pointLight.getMaterial().getAmbient());
         shader.setVec3(gl, name + ".diffuse", pointLight.getMaterial().getDiffuse());

@@ -15,12 +15,6 @@ public class TransformNode extends SGNode {
   public void setTransform(Mat4 m) {
     transform = new Mat4(m);
   }
-
-  // New Method
-  public void updateTransform(Mat4 m) {
-    transform = Mat4.multiply(transform, m);
-    this.setTransform(transform);
-  }
   
   protected void update(Mat4 t) {
     worldTransform = t;
