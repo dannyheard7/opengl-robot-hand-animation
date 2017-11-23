@@ -1,8 +1,3 @@
-import lights.DirectionalLight;
-import lights.Light;
-import models.Camera;
-import models.Mesh;
-import models.TwoTriangles;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -10,6 +5,12 @@ import com.jogamp.opengl.GLEventListener;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+import lights.DirectionalLight;
+import lights.Light;
+import mesh.Camera;
+import models.Lamp;
+import models.RobotHand;
+import models.Room;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -67,13 +68,6 @@ public class Arty_GLEventListener implements GLEventListener {
     return System.currentTimeMillis()/1000.0;
   }
 
-  
-  // ***************************************************
-  /* INTERACTION
-   *
-   *
-   */
-   
   private boolean animation = false;
   private double savedTime = 0;
    
@@ -101,29 +95,19 @@ public class Arty_GLEventListener implements GLEventListener {
   public void letterY() {
     robotHand.positionY();
   }
-  
-  // ***************************************************
-  /* THE SCENE
-   * Now define all the methods to handle the scene.
-   * This will be added to in later examples.
-   */
+
 
   private Camera camera;
   private Mat4 perspective;
-  private Mesh floor;
+
   private DirectionalLight dirLight;
 
   private RobotHand robotHand;
   private Lamp lamp, lamp2;
+  private Room room;
 
   
   private void initialise(GL3 gl) {
-    // TODO Move this into a scene class?
-    int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/marble.jpg");
-
-    floor = new TwoTriangles(gl, textureId0);
-    floor.setModelMatrix(Mat4Transform.scale(16,1,16));
-
     dirLight = new DirectionalLight(gl,  new Vec3(-0.2f, -1.0f, -0.3f));
     dirLight.setCamera(camera);
 
@@ -135,13 +119,9 @@ public class Arty_GLEventListener implements GLEventListener {
     lamp2 = new Lamp(gl, lights, camera);
     lamp2.setPosition(new Vec3(4, 0, -6));
 
-    floor.setLights(lights);
-    floor.setCamera(camera);
-
+    room = new Room(gl, lights, camera);
     robotHand = new RobotHand(gl, lights, camera);
 
-    //robotSceneGraph.print(0, false);
-    //System.exit(0);
   }
  
   private void render(GL3 gl) {
@@ -155,7 +135,7 @@ public class Arty_GLEventListener implements GLEventListener {
     lamp.render(gl);
     lamp2.render(gl);
 
-    floor.render(gl);
+    room.render(gl);
 
     if (animation) robotHand.update(elapsedTime);
     robotHand.render(gl);
@@ -166,8 +146,8 @@ public class Arty_GLEventListener implements GLEventListener {
     // needs to be changed if user resizes the window
     perspective = Mat4Transform.perspective(45, aspect);
     dirLight.setPerspective(perspective);
-    floor.setPerspective(perspective);
 
+    room.updatePerspectiveMatrices(perspective);
     robotHand.updatePerspectiveMatrices(perspective);
     lamp.updatePerspectiveMatrices(perspective);
     lamp2.updatePerspectiveMatrices(perspective);
@@ -176,8 +156,8 @@ public class Arty_GLEventListener implements GLEventListener {
   
   private void disposeMeshes(GL3 gl) {
     dirLight.dispose(gl);
-    floor.dispose(gl);
 
+    room.disposeMeshes(gl);
     robotHand.disposeMeshes(gl);
     lamp.disposeMeshes(gl);
     lamp2.disposeMeshes(gl);

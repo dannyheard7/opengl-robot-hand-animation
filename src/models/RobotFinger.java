@@ -1,8 +1,11 @@
+package models;
+
 import gmaths.Vec3;
-import models.Camera;
+import core.TextureLibrary;
+import mesh.Camera;
 import lights.Light;
-import models.Mesh;
-import models.Sphere;
+import mesh.Mesh;
+import mesh.Sphere;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
@@ -55,7 +58,7 @@ public class RobotFinger {
         Mat4 m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerBottomTransform = new TransformNode("finger bottom transform", m);
-        MeshNode fingerBottomShape = new MeshNode("models.Sphere(finger bottom)", sphere);
+        MeshNode fingerBottomShape = new MeshNode("mesh.Sphere(finger bottom)", sphere);
 
         fingerMiddleJointPosition = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerMiddleJoint = new TransformNode("middle joint", fingerMiddleJointPosition);
@@ -64,7 +67,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerMiddleTransform = new TransformNode("finger middle transform", m);
-        MeshNode fingerMiddleShape = new MeshNode("models.Sphere(finger middle)", sphere);
+        MeshNode fingerMiddleShape = new MeshNode("mesh.Sphere(finger middle)", sphere);
 
         fingerTopJointPosition = Mat4Transform.translate(0,  sectionHeight, 0);
         fingerTopJoint = new TransformNode("finger top joint", fingerTopJointPosition);
@@ -73,7 +76,7 @@ public class RobotFinger {
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode fingerTopTransform = new TransformNode("finger top transform", m);
-        MeshNode fingerTopShape = new MeshNode("models.Sphere(finger top)", sphere);
+        MeshNode fingerTopShape = new MeshNode("mesh.Sphere(finger top)", sphere);
 
         finger.addChild(fingerPosition);
             fingerPosition.addChild(fingerBottomJoint);

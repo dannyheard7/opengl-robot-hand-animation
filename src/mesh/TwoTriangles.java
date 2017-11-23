@@ -1,11 +1,8 @@
-package models;
+package mesh;
 
 import gmaths.*;
 import com.jogamp.opengl.*;
-import lights.DirectionalLight;
-import lights.Light;
-import lights.PointLight;
-import lights.SpotLight;
+import core.Shader;
 
 public class TwoTriangles extends Mesh {
   

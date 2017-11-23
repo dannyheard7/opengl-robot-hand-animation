@@ -2,11 +2,8 @@ package scenegraph;
 
 import gmaths.Mat4;
 import gmaths.Vec3;
-import gmaths.Vec4;
 import lights.Light;
-import models.Mesh;
 import com.jogamp.opengl.*;
-import scenegraph.SGNode;
 
 public class LightNode extends SGNode {
 
@@ -20,8 +17,6 @@ public class LightNode extends SGNode {
     protected void update(Mat4 t) {
         Vec3 pos = Mat4.multiply(t, new Vec3(1, 1, 1));
         light.setPosition(pos);
-
-//        System.out.println(pos);
 
         super.update(t);
     }

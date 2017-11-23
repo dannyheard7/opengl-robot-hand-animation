@@ -1,13 +1,8 @@
-package models;
+package mesh;
 
 import gmaths.*;
 import com.jogamp.opengl.*;
-import lights.DirectionalLight;
-import lights.Light;
-import lights.PointLight;
-import lights.SpotLight;
-
-import java.util.ArrayList;
+import core.Shader;
 
 public class Cube extends Mesh {
 

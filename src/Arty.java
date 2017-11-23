@@ -1,4 +1,4 @@
-import models.Camera;
+import mesh.Camera;
 import gmaths.*;
 import java.awt.*;
 import java.awt.event.*;

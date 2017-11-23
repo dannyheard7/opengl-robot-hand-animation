@@ -1,12 +1,15 @@
+package models;
+
 import gmaths.Vec3;
+import core.TextureLibrary;
 import lights.PointLight;
-import models.Camera;
+import mesh.Camera;
 import lights.Light;
-import models.Mesh;
+import mesh.Mesh;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
-import models.Sphere;
+import mesh.Sphere;
 import scenegraph.*;
 
 import java.util.ArrayList;
@@ -44,13 +47,13 @@ public class Lamp {
         Mat4 m = Mat4Transform.scale(1f, 0.2f,1f);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode baseTransform = new TransformNode("base transform", m);
-        MeshNode baseShape = new MeshNode("models.Sphere(base)", sphere);
+        MeshNode baseShape = new MeshNode("mesh.Sphere(base)", sphere);
 
         NameNode tube = new NameNode("tube");
         m = Mat4Transform.scale(0.5f, 5f,0.5f);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode tubeTransform = new TransformNode("tube transform", m);
-        MeshNode tubeShape = new MeshNode("models.Sphere(tube)", sphere);
+        MeshNode tubeShape = new MeshNode("mesh.Sphere(tube)", sphere);
 
         // TODO: lamp scene graph like robot finger
 

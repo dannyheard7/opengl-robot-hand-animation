@@ -1,8 +1,8 @@
 package lights;
 
-import models.Camera;
-import models.Material;
-import models.Shader;
+import mesh.Camera;
+import mesh.Material;
+import core.Shader;
 import gmaths.*;
 import java.nio.*;
 import com.jogamp.common.nio.*;

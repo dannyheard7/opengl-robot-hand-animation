@@ -1,9 +1,10 @@
-package models;
+package mesh;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
+import core.Shader;
 import lights.DirectionalLight;
 import lights.Light;
 import lights.PointLight;
@@ -29,7 +30,7 @@ public abstract class Mesh {
   protected Shader shader;
   protected Mat4 model;
   
-  protected models.Camera camera;
+  protected mesh.Camera camera;
   protected Mat4 perspective;
   protected ArrayList<Light> lights;
   
@@ -42,7 +43,7 @@ public abstract class Mesh {
     model = m;
   }
   
-  public void setCamera(models.Camera camera) {
+  public void setCamera(mesh.Camera camera) {
     this.camera = camera;
   }
   

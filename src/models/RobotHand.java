@@ -1,7 +1,10 @@
-import models.Camera;
-import models.Cube;
+package models;
+
+import core.TextureLibrary;
+import mesh.Camera;
+import mesh.Cube;
 import lights.Light;
-import models.Mesh;
+import mesh.Mesh;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
@@ -35,7 +38,7 @@ public class RobotHand {
         pinkyFinger = new RobotFinger(gl, lights, camera);
         thumb = new RobotFinger(gl, lights, camera);
 
-        ring = new Ring(gl, lights, camera);
+        //ring = new Ring(gl, lights, camera);
 
         this.setupSceneGraph();
     }
@@ -56,7 +59,7 @@ public class RobotHand {
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode armTransform = new TransformNode("arm transform", m);
-        MeshNode armShape = new MeshNode("models.Cube(arm)", cube);
+        MeshNode armShape = new MeshNode("mesh.Cube(arm)", cube);
 
         NameNode hand = new NameNode("hand");
         m = Mat4Transform.translate(0, armHeight, 0);
@@ -65,7 +68,7 @@ public class RobotHand {
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode handTransform = new TransformNode("hand transform", m);
-        MeshNode handShape = new MeshNode("models.Cube(hand)", cube);
+        MeshNode handShape = new MeshNode("mesh.Cube(hand)", cube);
 
         float dist = 2.5f  / 3;
 
@@ -79,11 +82,11 @@ public class RobotHand {
 
         SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, fingerRoate, 1f);
         SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, fingerRoate, 1.25f);
-        SGNode ringFingerNode = ringFinger.buildSceneGraph("Ring Finger", ringPos, fingerRoate,1f);
+        SGNode ringFingerNode = ringFinger.buildSceneGraph("models.Ring Finger", ringPos, fingerRoate,1f);
         SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, fingerRoate,0.75f);
         SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, thumbRotate, 0.75f);
 
-        ringFinger.addRing(ring);
+//        ringFinger.addRing(ring);
 
         robot.addChild(robotArmTranslate);
         robotArmTranslate.addChild(arm);
@@ -116,7 +119,7 @@ public class RobotHand {
         pinkyFinger.updatePerspectiveMatrices(perspective);
         thumb.updatePerspectiveMatrices(perspective);
 
-        ring.updatePerspectiveMatrices(perspective);
+//        ring.updatePerspectiveMatrices(perspective);
     }
 
     public void update(double delta) {
@@ -164,7 +167,7 @@ public class RobotHand {
 
         thumb.transformFinger(m);
 
-        // Index, Middle, Ring & pinky folded
+        // Index, Middle, models.Ring & pinky folded
         indexFinger.curled(90);
         middleFinger.curled(90);
         ringFinger.curled(90);
@@ -180,7 +183,7 @@ public class RobotHand {
         pinkyFinger.transformFinger(m);
         thumb.transformFinger(m);
 
-        // Ring, Middle & index folded
+        // models.Ring, Middle & index folded
         indexFinger.curled(90);
         middleFinger.curled(90);
         ringFinger.curled(90);
@@ -196,7 +199,7 @@ public class RobotHand {
         pinkyFinger.disposeMeshes(gl);
         thumb.disposeMeshes(gl);
 
-        ring.disposeMeshes(gl);
+//        ring.disposeMeshes(gl);
     }
 
 }

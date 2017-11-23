@@ -1,9 +1,12 @@
+package models;
+
 import gmaths.Vec3;
+import core.TextureLibrary;
 import lights.SpotLight;
-import models.Camera;
+import mesh.Camera;
 import lights.Light;
-import models.Mesh;
-import models.Sphere;
+import mesh.Mesh;
+import mesh.Sphere;
 import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
@@ -46,7 +49,7 @@ public class Ring {
         Mat4 m = Mat4Transform.scale(1f, 0.2f, 1.2f);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
         TransformNode bandTransform = new TransformNode("band rotate", m);
-        MeshNode bandShape = new MeshNode("models.Sphere(band)", sphere);
+        MeshNode bandShape = new MeshNode("mesh.Sphere(band)", sphere);
 
         NameNode lightNameNode = new NameNode("light");
         m = Mat4Transform.translate(0, 0.1f, -0.6f);
