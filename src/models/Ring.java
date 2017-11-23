@@ -28,10 +28,10 @@ public class Ring {
 
         light = new SpotLight(gl, 1.0f, 0.14f,0.07f, lightDirection, cutOff, outerCutOff);
         light.setCamera(camera);
-        lights.add(light); // Shallow copying, might this cause problems?
+       // lights.add(light); // TODO: Light direction
 
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
-        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/gold.jpg");
+        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/gold_specular.jpg");
 
         sphere = new Sphere(gl, textureId3, textureId4);
         sphere.setLights(lights);
@@ -43,7 +43,8 @@ public class Ring {
     private void setupSceneGraph() {
         ring = new NameNode("ring");
 
-        TransformNode ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.5f,0));
+        TransformNode ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.4f,0));
+        // TODO Move the ring translate to finger class
 
         NameNode band = new NameNode("band");
         Mat4 m = Mat4Transform.scale(1f, 0.2f, 1.2f);

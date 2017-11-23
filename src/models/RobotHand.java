@@ -18,19 +18,26 @@ import java.util.ArrayList;
 
 public class RobotHand {
 
-    private Mesh cube;
+    private Mesh handCube, armCube;
     private SGNode robot;
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
-        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
+        int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
+        int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
 
-        cube = new Cube(gl, textureId3, textureId4);
-        cube.setLights(lights);
-        cube.setCamera(camera);
+        int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/container.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container_specular.jpg");
+
+        handCube = new Cube(gl, textureId0, textureId1);
+        handCube.setLights(lights);
+        handCube.setCamera(camera);
+
+        armCube = new Cube(gl, textureId2, textureId3);
+        armCube.setLights(lights);
+        armCube.setCamera(camera);
 
         indexFinger = new RobotFinger(gl, lights, camera);
         middleFinger = new RobotFinger(gl, lights, camera);
@@ -38,7 +45,7 @@ public class RobotHand {
         pinkyFinger = new RobotFinger(gl, lights, camera);
         thumb = new RobotFinger(gl, lights, camera);
 
-        //ring = new Ring(gl, lights, camera);
+        ring = new Ring(gl, lights, camera);
 
         this.setupSceneGraph();
     }
@@ -51,24 +58,24 @@ public class RobotHand {
         float handWidth = 3f;
         float handScale = 1f;
 
-        robot = new NameNode("robot arm");
+        robot = new NameNode("robot armCube");
 
-        TransformNode robotArmTranslate = new TransformNode("arm translate", Mat4Transform.translate(0,0,0));
+        TransformNode robotArmTranslate = new TransformNode("armCube translate", Mat4Transform.translate(0,0,0));
 
-        NameNode arm = new NameNode("arm");
+        NameNode arm = new NameNode("armCube");
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode armTransform = new TransformNode("arm transform", m);
-        MeshNode armShape = new MeshNode("mesh.Cube(arm)", cube);
+        TransformNode armTransform = new TransformNode("armCube transform", m);
+        MeshNode armShape = new MeshNode("mesh.Cube(armCube)", armCube);
 
-        NameNode hand = new NameNode("hand");
+        NameNode hand = new NameNode("handCube");
         m = Mat4Transform.translate(0, armHeight, 0);
-        TransformNode handTranslate = new TransformNode("hand translate", m);
+        TransformNode handTranslate = new TransformNode("handCube translate", m);
 
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode handTransform = new TransformNode("hand transform", m);
-        MeshNode handShape = new MeshNode("mesh.Cube(hand)", cube);
+        TransformNode handTransform = new TransformNode("handCube transform", m);
+        MeshNode handShape = new MeshNode("mesh.Cube(handCube)", handCube);
 
         float dist = 2.5f  / 3;
 
@@ -86,7 +93,7 @@ public class RobotHand {
         SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, fingerRoate,0.75f);
         SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, thumbRotate, 0.75f);
 
-//        ringFinger.addRing(ring);
+        ringFinger.addRing(ring);
 
         robot.addChild(robotArmTranslate);
         robotArmTranslate.addChild(arm);
@@ -111,7 +118,8 @@ public class RobotHand {
 
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
-        cube.setPerspective(perspective);
+        handCube.setPerspective(perspective);
+        armCube.setPerspective(perspective);
 
         indexFinger.updatePerspectiveMatrices(perspective);
         middleFinger.updatePerspectiveMatrices(perspective);
@@ -119,7 +127,7 @@ public class RobotHand {
         pinkyFinger.updatePerspectiveMatrices(perspective);
         thumb.updatePerspectiveMatrices(perspective);
 
-//        ring.updatePerspectiveMatrices(perspective);
+        ring.updatePerspectiveMatrices(perspective);
     }
 
     public void update(double delta) {
@@ -191,7 +199,8 @@ public class RobotHand {
 
 
     public void disposeMeshes(GL3 gl) {
-        cube.dispose(gl);
+        handCube.dispose(gl);
+        armCube.dispose(gl);
 
         indexFinger.disposeMeshes(gl);
         middleFinger.disposeMeshes(gl);
@@ -199,7 +208,7 @@ public class RobotHand {
         pinkyFinger.disposeMeshes(gl);
         thumb.disposeMeshes(gl);
 
-//        ring.disposeMeshes(gl);
+        ring.disposeMeshes(gl);
     }
 
 }

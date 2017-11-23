@@ -28,8 +28,8 @@ public class RobotFinger {
 
 
     public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
-        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
+        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
 
         sphere = new Sphere(gl, textureId3, textureId4);
         sphere.setLights(lights);

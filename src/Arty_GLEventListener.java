@@ -82,6 +82,10 @@ public class Arty_GLEventListener implements GLEventListener {
     savedTime = elapsedTime;
   }
 
+  public void resetHand() {
+    robotHand.neutralPosition();
+  }
+
   public void letterD() {
     robotHand.positionD();
 
@@ -121,7 +125,6 @@ public class Arty_GLEventListener implements GLEventListener {
 
     room = new Room(gl, lights, camera);
     robotHand = new RobotHand(gl, lights, camera);
-
   }
  
   private void render(GL3 gl) {
@@ -139,7 +142,6 @@ public class Arty_GLEventListener implements GLEventListener {
 
     if (animation) robotHand.update(elapsedTime);
     robotHand.render(gl);
-
   }
     
   private void updatePerspectiveMatrices() {
@@ -151,7 +153,6 @@ public class Arty_GLEventListener implements GLEventListener {
     robotHand.updatePerspectiveMatrices(perspective);
     lamp.updatePerspectiveMatrices(perspective);
     lamp2.updatePerspectiveMatrices(perspective);
-
   }
   
   private void disposeMeshes(GL3 gl) {
@@ -163,8 +164,4 @@ public class Arty_GLEventListener implements GLEventListener {
     lamp2.disposeMeshes(gl);
   }
 
-
-  public void resetHand() {
-    robotHand.neutralPosition();
-  }
 }

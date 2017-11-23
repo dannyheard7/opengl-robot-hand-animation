@@ -15,16 +15,25 @@ import java.util.ArrayList;
 // TODO: Restructure this into a general model class
 public class Room {
 
-    private Mesh floorMesh;
+    private Mesh floorMesh, wallMesh, ceilingMesh;
     private SGNode room;
 
     public Room(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/marble.jpg");
+        int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/marble-floor.jpg");
+        int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/marble-tiles.jpg");
+        int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/plaster.jpg");
 
         floorMesh = new TwoTriangles(gl, textureId0);
-
         floorMesh.setLights(lights);
         floorMesh.setCamera(camera);
+
+        wallMesh = new TwoTriangles(gl, textureId1);
+        wallMesh.setLights(lights);
+        wallMesh.setCamera(camera);
+
+        ceilingMesh = new TwoTriangles(gl, textureId2);
+        ceilingMesh.setLights(lights);
+        ceilingMesh.setCamera(camera);
 
         this.setupSceneGraph();
     }
@@ -44,37 +53,39 @@ public class Room {
         NameNode rightWall = new NameNode("right wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(90));
-        m = Mat4.multiply(m, Mat4Transform.translate(0.5f, -0.5f, 0));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(90)); // Get direction of texture correct
+        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, 0.5f));
         TransformNode rightWallTransform = new TransformNode("wall transform", m);
-        MeshNode rightWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
+        MeshNode rightWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode leftWall = new NameNode("left wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-90));
-        m = Mat4.multiply(m, Mat4Transform.translate(-0.5f, -0.5f, 0));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(90));
+        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, -0.5f));
         TransformNode leftWallTransform = new TransformNode("wall transform", m);
-        MeshNode leftWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
+        MeshNode leftWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode frontWall = new NameNode("front wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(-90));
         m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, 0.5f));
         TransformNode frontWallTransform = new TransformNode("wall transform", m);
-        MeshNode frontWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
+        MeshNode frontWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode backWall = new NameNode("back wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(90));
         m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, -0.5f));
         TransformNode backWallTransform = new TransformNode("wall transform", m);
-        MeshNode backWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
+        MeshNode backWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode ceiling = new NameNode("ceiling");
         m = Mat4Transform.scale(roomWidth, 1, roomDepth);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(180));
         m = Mat4.multiply(m, Mat4Transform.translate(0, -roomHeight, 0));
         TransformNode ceilingTransform = new TransformNode("ceiling transform", m);
-        MeshNode ceilingShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
+        MeshNode ceilingShape = new MeshNode("mesh.TwoTriangles(floorMesh)", ceilingMesh);
 
         room.addChild(floor);
             floor.addChild(floorTransform);
@@ -105,10 +116,14 @@ public class Room {
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
         floorMesh.setPerspective(perspective);
+        wallMesh.setPerspective(perspective);
+        ceilingMesh.setPerspective(perspective);
     }
 
     public void disposeMeshes(GL3 gl) {
         floorMesh.dispose(gl);
+        wallMesh.dispose(gl);
+        ceilingMesh.dispose(gl);
     }
 
 }

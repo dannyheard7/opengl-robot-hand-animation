@@ -28,8 +28,8 @@ public class Lamp {
         light.setCamera(camera);
         lights.add(light); // Shallow copying, might this cause problems?
 
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
-        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container.jpg");
+        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container_specular.jpg");
 
         sphere = new Sphere(gl, textureId3, textureId4);
         sphere.setLights(lights);
