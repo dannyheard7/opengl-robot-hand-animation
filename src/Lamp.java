@@ -1,7 +1,6 @@
 import gmaths.Vec3;
 import lights.PointLight;
 import models.Camera;
-import models.Cube;
 import lights.Light;
 import models.Mesh;
 import com.jogamp.opengl.GL3;
@@ -22,7 +21,7 @@ public class Lamp {
     private PointLight light;
 
     public Lamp(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        light = new PointLight(gl, 1.0f, 0.07f,0.017f);
+        light = new PointLight(gl, 1.0f, 0.09f,0.032f);
         light.setCamera(camera);
         lights.add(light); // Shallow copying, might this cause problems?
 

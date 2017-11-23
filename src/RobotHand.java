@@ -19,6 +19,7 @@ public class RobotHand {
     private SGNode robot;
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
+    private Ring ring;
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
@@ -33,6 +34,8 @@ public class RobotHand {
         ringFinger = new RobotFinger(gl, lights, camera);
         pinkyFinger = new RobotFinger(gl, lights, camera);
         thumb = new RobotFinger(gl, lights, camera);
+
+        ring = new Ring(gl, lights, camera);
 
         this.setupSceneGraph();
     }
@@ -80,6 +83,8 @@ public class RobotHand {
         SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, fingerRoate,0.75f);
         SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, thumbRotate, 0.75f);
 
+        ringFinger.addRing(ring);
+
         robot.addChild(robotArmTranslate);
         robotArmTranslate.addChild(arm);
         arm.addChild(armTransform);
@@ -110,6 +115,8 @@ public class RobotHand {
         ringFinger.updatePerspectiveMatrices(perspective);
         pinkyFinger.updatePerspectiveMatrices(perspective);
         thumb.updatePerspectiveMatrices(perspective);
+
+        ring.updatePerspectiveMatrices(perspective);
     }
 
     public void update(double delta) {
@@ -188,6 +195,8 @@ public class RobotHand {
         ringFinger.disposeMeshes(gl);
         pinkyFinger.disposeMeshes(gl);
         thumb.disposeMeshes(gl);
+
+        ring.disposeMeshes(gl);
     }
 
 }

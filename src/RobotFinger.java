@@ -23,6 +23,7 @@ public class RobotFinger {
     private float sectionHeight, fingerWidth, fingerDepth;
 
 
+
     public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container2.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container2_specular.jpg");
@@ -134,6 +135,11 @@ public class RobotFinger {
         finger.update();
     }
 
+    public void addRing(Ring ring) {
+        fingerBottomJoint.addChild(ring.getSceneGraph());
+
+        // Get finger normal? then use that as direction of the light
+    }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
         sphere.setPerspective(perspective);

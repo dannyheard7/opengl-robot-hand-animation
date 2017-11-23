@@ -29,7 +29,7 @@ public abstract class Mesh {
   protected Shader shader;
   protected Mat4 model;
   
-  protected Camera camera;
+  protected models.Camera camera;
   protected Mat4 perspective;
   protected ArrayList<Light> lights;
   
@@ -42,7 +42,7 @@ public abstract class Mesh {
     model = m;
   }
   
-  public void setCamera(Camera camera) {
+  public void setCamera(models.Camera camera) {
     this.camera = camera;
   }
   

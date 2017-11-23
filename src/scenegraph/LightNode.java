@@ -19,7 +19,9 @@ public class LightNode extends SGNode {
 
     protected void update(Mat4 t) {
         Vec3 pos = Mat4.multiply(t, new Vec3(1, 1, 1));
-        light.setPosition(pos); // Have to set light position separately here
+        light.setPosition(pos);
+
+//        System.out.println(pos);
 
         super.update(t);
     }

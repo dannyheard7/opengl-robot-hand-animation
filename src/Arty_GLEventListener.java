@@ -1,6 +1,5 @@
 import lights.DirectionalLight;
 import lights.Light;
-import lights.PointLight;
 import models.Camera;
 import models.Mesh;
 import models.TwoTriangles;
@@ -11,7 +10,6 @@ import com.jogamp.opengl.GLEventListener;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
-import scenegraph.SGNode;
 
 import java.util.ArrayList;
 import java.util.Arrays;
