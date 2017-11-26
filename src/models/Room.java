@@ -13,7 +13,7 @@ import scenegraph.*;
 import java.util.ArrayList;
 
 // TODO: Restructure this into a general model class
-public class Room {
+public class Room extends Model {
 
     private Mesh floorMesh, wallMesh, ceilingMesh;
     private SGNode room;

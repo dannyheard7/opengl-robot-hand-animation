@@ -1,5 +1,6 @@
 package models;
 
+import core.KeyFrame;
 import core.TextureLibrary;
 import mesh.Camera;
 import mesh.Cube;
@@ -16,13 +17,15 @@ import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
-public class RobotHand {
+public class RobotHand extends Model {
 
     private Mesh handCube, armCube;
     private SGNode robot;
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
+
+    private KeyFrame indexFingerAnim, middleFingerAnim, ringFingerAnim, pinkyFingerAnim;
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
@@ -46,6 +49,11 @@ public class RobotHand {
         thumb = new RobotFinger(gl, lights, camera);
 
         ring = new Ring(gl, lights, camera);
+
+        indexFingerAnim = new KeyFrame(0, 90, 1, indexFinger::curl);
+        middleFingerAnim = new KeyFrame(0, 90, 1, middleFinger::curl);
+        ringFingerAnim =  new KeyFrame(0, 90, 1, ringFinger::curl);
+        pinkyFingerAnim =  new KeyFrame(0, 90, 1, pinkyFinger::curl);
 
         this.setupSceneGraph();
     }
@@ -131,7 +139,10 @@ public class RobotHand {
     }
 
     public void update(double delta) {
-
+        indexFingerAnim.update(delta);
+        pinkyFingerAnim.update(delta);
+        middleFingerAnim.update(delta);
+        ringFingerAnim.update(delta);
     }
 
     public void neutralPosition() {
@@ -140,25 +151,31 @@ public class RobotHand {
         ringFinger.reset();
         pinkyFinger.reset();
         thumb.reset();
+
+        indexFingerAnim.reset();
+        middleFingerAnim.reset();
+        ringFingerAnim.reset();
+        pinkyFingerAnim.reset();
     }
 
+    // TODO: Maybe a different letter
     public void positionD() {
         this.neutralPosition();
 
-        thumb.curled(70);
+        thumb.curl(60);
 
         // Need a way to be able to curl and transform a finger without one resetting the other
-        middleFinger.curled(90);
-        ringFinger.curled(90);
-        pinkyFinger.curled(90);
+        middleFinger.curl(90);
+        ringFinger.curl(90);
+        pinkyFinger.curl(90);
 
         Mat4 m = Mat4Transform.rotateAroundZ(-10);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(28));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.05f, 0.20f));
+        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(55));
+        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.05f, -0.30f));
         thumb.transformFinger(m);
 
         // Need to move all fingers towards thumb slightly
-        m = Mat4Transform.rotateAroundX(30);
+        m = Mat4Transform.rotateAroundX(40);
         m = Mat4.multiply(m, Mat4Transform.rotateAroundY(15));
 
         middleFinger.transformFinger(m);
@@ -170,16 +187,18 @@ public class RobotHand {
         this.neutralPosition();
 
         // thumb rotated upwards
-        Mat4 m = Mat4Transform.rotateAroundZ(90);
-        m = Mat4.multiply(m, Mat4Transform.translate(0.75f / 2, 0, 0));
+        //Mat4 m = Mat4Transform.rotateAroundZ(90);
+       // m = Mat4.multiply(m, Mat4Transform.translate(thumb.getFingerWidth() / 2, 0, 0));
 
-        thumb.transformFinger(m);
+        //thumb.transformFinger(m);
+
+        //thumb.rotateZ(90);
 
         // Index, Middle, models.Ring & pinky folded
-        indexFinger.curled(90);
-        middleFinger.curled(90);
-        ringFinger.curled(90);
-        pinkyFinger.curled(90);
+        indexFinger.curl(90);
+        middleFinger.curl(90);
+        ringFinger.curl(90);
+        pinkyFinger.curl(90);
     }
 
     public void positionY() {
@@ -192,9 +211,9 @@ public class RobotHand {
         thumb.transformFinger(m);
 
         // models.Ring, Middle & index folded
-        indexFinger.curled(90);
-        middleFinger.curled(90);
-        ringFinger.curled(90);
+        indexFinger.curl(90);
+        middleFinger.curl(90);
+        ringFinger.curl(90);
     }
 
 

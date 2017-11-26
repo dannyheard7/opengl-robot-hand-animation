@@ -84,6 +84,7 @@ public class Arty_GLEventListener implements GLEventListener {
 
   public void resetHand() {
     robotHand.neutralPosition();
+    animation = false;
   }
 
   public void letterD() {

@@ -40,8 +40,8 @@ struct SpotLight {
   vec3 specular;
 
   float constant;
-    float linear; // Add this into SpotLight Class
-    float quadratic;
+  float linear;
+  float quadratic;
 
   vec3  direction;
   float cutOff;

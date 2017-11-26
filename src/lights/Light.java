@@ -23,7 +23,7 @@ abstract public class Light {
     material.setAmbient(1.0f, 1.0f, 1.0f);
     material.setDiffuse(1.0f, 1.0f, 1.0f);
     material.setSpecular(1.0f, 1.0f, 1.0f);
-    position = new Vec3(3f,2f,1f);
+    position = new Vec3(0, 0, 0);
     model = new Mat4(1);
     shader = new Shader(gl, "shaders/vs_light.glsl", "shaders/fs_light.glsl");
     fillBuffers(gl);

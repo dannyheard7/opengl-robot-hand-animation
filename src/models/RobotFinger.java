@@ -16,7 +16,7 @@ import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
-public class RobotFinger {
+public class RobotFinger extends Model {
 
     private Mesh sphere;
     private NameNode finger;
@@ -24,8 +24,6 @@ public class RobotFinger {
     private Mat4 fingerBottomJointPosition, fingerMiddleJointPosition, fingerTopJointPosition;
 
     private float sectionHeight, fingerWidth, fingerDepth;
-
-
 
     public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
@@ -36,12 +34,6 @@ public class RobotFinger {
         sphere.setCamera(camera);
     }
 
-    public float getSectionHeight() {
-        return this.sectionHeight;
-    }
-
-
-    // TODO: Have rotation? for thumb
     public SGNode buildSceneGraph(String name, Vec3 position, Mat4 rotation, float sectionHeight) {
         finger = new NameNode(name);
 
@@ -111,26 +103,22 @@ public class RobotFinger {
         finger.update();
     }
 
-    public void curled(float angle) {
-        // If angle is less than 90, then spheres will not be touching
+    public void curl(float angle) {
+        // If angle is less than 90, then spheres collide
         double val = Math.abs(Math.sin(Math.toRadians(angle)));
+        float diff = (this.fingerWidth / 2) / (float)Math.exp(1-val);
 
-        float diff = 0;
-        if (val > 0 && val < 1) {
-            diff = (this.sectionHeight / 2) / (float)val;
-        }
-
-        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.translate(0, 0.5f, 0.25f));
+        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.translate(0, diff, 0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
 
         fingerBottomJoint.setTransform(m);
 
-        m = Mat4.multiply(fingerMiddleJointPosition, Mat4Transform.translate(0, 0, 0.25f));
+        m = Mat4.multiply(fingerMiddleJointPosition, Mat4Transform.translate(0, diff, 0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
 
         fingerMiddleJoint.setTransform(m);
 
-        m = Mat4.multiply(fingerTopJointPosition, Mat4Transform.translate(0,0, 0));
+        m = Mat4.multiply(fingerTopJointPosition, Mat4Transform.translate(0, diff, 0));
         m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
 
         fingerTopJoint.setTransform(m);
@@ -140,8 +128,10 @@ public class RobotFinger {
 
     public void addRing(Ring ring) {
         fingerBottomJoint.addChild(ring.getSceneGraph());
+    }
 
-        // Get finger normal? then use that as direction of the light
+    public float getFingerWidth() {
+        return this.fingerWidth;
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
