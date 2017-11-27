@@ -126,6 +126,13 @@ public class RobotFinger extends Model {
         finger.update();
     }
 
+    public void rotateAroundZ(float angle) {
+        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.rotateAroundZ(angle));
+        fingerBottomJoint.setTransform(m);
+
+        finger.update();
+    }
+
     public void addRing(Ring ring) {
         fingerBottomJoint.addChild(ring.getSceneGraph());
     }

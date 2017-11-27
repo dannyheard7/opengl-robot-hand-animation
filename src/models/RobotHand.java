@@ -192,7 +192,7 @@ public class RobotHand extends Model {
 
         //thumb.transformFinger(m);
 
-        //thumb.rotateZ(90);
+        thumb.rotateAroundZ(90);
 
         // Index, Middle, models.Ring & pinky folded
         indexFinger.curl(90);
@@ -205,10 +205,9 @@ public class RobotHand extends Model {
         this.neutralPosition();
 
         // Pinky Finger rotated away & thumb towards other fingers
-        Mat4 m = Mat4Transform.rotateAroundZ(20);
 
-        pinkyFinger.transformFinger(m);
-        thumb.transformFinger(m);
+        pinkyFinger.rotateAroundZ(20);
+        thumb.rotateAroundZ(20);
 
         // models.Ring, Middle & index folded
         indexFinger.curl(90);

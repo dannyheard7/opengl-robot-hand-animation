@@ -22,13 +22,13 @@ public class Ring extends Model {
     private SpotLight light;
 
     public Ring(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        Vec3 lightDirection = new Vec3(0, 1, 0);
+        Vec3 lightDirection = new Vec3(0, 0, -1);
         float cutOff = (float)Math.cos(Math.toRadians(12.5f));
         float outerCutOff = (float)Math.cos(Math.toRadians(17.5f));
 
         light = new SpotLight(gl, 1.0f, 0.14f,0.07f, lightDirection, cutOff, outerCutOff);
         light.setCamera(camera);
-        lights.add(light); // TODO: Light direction
+        lights.add(light);
 
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/gold.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/gold_specular.jpg");
@@ -53,9 +53,8 @@ public class Ring extends Model {
         MeshNode bandShape = new MeshNode("mesh.Sphere(band)", sphere);
 
         NameNode lightNameNode = new NameNode("light");
-        m = Mat4Transform.rotateAroundX(90);
-        m = Mat4.multiply(m, Mat4Transform.scale(0.2f, 0.2f, 0.2f));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -3f, -0.5f));
+        m =  Mat4Transform.scale(0.2f, 0.2f, 0.2f);
+        m = Mat4.multiply(m, Mat4Transform.translate(0, 0.5f, -3f));
         TransformNode lightTransform = new TransformNode("light transform", m);
         LightNode lightShape = new LightNode("light.SpotLight(lamp)", light);
 

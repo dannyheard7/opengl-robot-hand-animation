@@ -6,7 +6,7 @@ import gmaths.Vec3;
 public class SpotLight extends Light {
 
     private float constant, linear, quadratic, cutOff, outerCutOff;
-    private Vec3 direction;
+    private Vec3 initDirection, curDirection;
 
     public SpotLight(GL3 gl, float constant, float linear, float quadratic, Vec3 direction, float cutOff, float outerCutOff) {
         super(gl);
@@ -15,7 +15,8 @@ public class SpotLight extends Light {
         this.linear = linear;
         this.quadratic = quadratic;
 
-        this.direction = direction;
+        this.curDirection = direction;
+        this.initDirection = direction;
         this.cutOff = cutOff;
         this.outerCutOff = outerCutOff;
     }
@@ -33,7 +34,11 @@ public class SpotLight extends Light {
     }
 
     public Vec3 getDirection() {
-        return direction;
+        return curDirection;
+    }
+
+    public Vec3 getInitDirection() {
+        return initDirection;
     }
 
     public float getCutOff() {
@@ -45,6 +50,6 @@ public class SpotLight extends Light {
     }
 
     public void setDirection(Vec3 direction) {
-        this.direction = direction;
+        this.curDirection = direction;
     }
 }

@@ -63,6 +63,7 @@ public class Mat4 {   // row column formulation
   public static Vec3 multiply(Mat4 a, Vec3 b) {
     Vec3 result = new Vec3();
 
+    // Seems to be wrong direction with vector, getting better results when transforming but still not correct
     result.x = a.values[0][0] * b.x + a.values[0][1] * b.y + a.values[0][2] * b.z + a.values[0][3];
     result.y = a.values[1][0] * b.x + a.values[1][1] * b.y + a.values[1][2] * b.z + a.values[1][3];
     result.z = a.values[2][0] * b.x + a.values[2][1] * b.y + a.values[2][2] * b.z + a.values[2][3];
