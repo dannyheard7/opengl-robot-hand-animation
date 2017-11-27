@@ -103,6 +103,7 @@ public class RobotFinger extends Model {
         finger.update();
     }
 
+    // TODO: change this to accept a float between 0-1 represent amount of curling
     public void curl(float angle) {
         // If angle is less than 90, then spheres collide
         double val = Math.abs(Math.sin(Math.toRadians(angle)));

@@ -1,6 +1,8 @@
 package models;
 
-import core.KeyFrame;
+import animation.Animation;
+import animation.KeyFrame;
+import animation.Position;
 import core.TextureLibrary;
 import mesh.Camera;
 import mesh.Cube;
@@ -25,7 +27,7 @@ public class RobotHand extends Model {
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
 
-    private KeyFrame indexFingerAnim, middleFingerAnim, ringFingerAnim, pinkyFingerAnim;
+    private Animation handAnim, middleFingerAnim, ringFingerAnim, pinkyFingerAnim, thumbAnim;
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
@@ -50,12 +52,29 @@ public class RobotHand extends Model {
 
         ring = new Ring(gl, lights, camera);
 
-        indexFingerAnim = new KeyFrame(0, 90, 1, indexFinger::curl);
-        middleFingerAnim = new KeyFrame(0, 90, 1, middleFinger::curl);
-        ringFingerAnim =  new KeyFrame(0, 90, 1, ringFinger::curl);
-        pinkyFingerAnim =  new KeyFrame(0, 90, 1, pinkyFinger::curl);
 
         this.setupSceneGraph();
+        this.setupAnimation();
+    }
+
+    private void setupAnimation() {
+        handAnim = new Animation(0.01f);
+
+        KeyFrame keyFrame1 = new KeyFrame();
+        Position indexFingerStraight = new Position(0, indexFinger::curl);
+        keyFrame1.addPosition("Index Finger", indexFingerStraight);
+        Position middleFingerStraight = new Position(0, middleFinger::curl);
+        keyFrame1.addPosition("Middle Finger", middleFingerStraight);
+
+        KeyFrame keyFrame2 = new KeyFrame();
+        Position indexFingerCurled = new Position(90, indexFinger::curl);
+        keyFrame2.addPosition("Index Finger", indexFingerCurled);
+        Position middleFingerCurled = new Position(50, middleFinger::curl);
+        keyFrame2.addPosition("Middle Finger", middleFingerCurled);
+
+        handAnim.addKeyFrame(keyFrame1);
+        handAnim.addKeyFrame(keyFrame2);
+        handAnim.addKeyFrame(keyFrame1);
     }
 
     private void setupSceneGraph() {
@@ -104,18 +123,18 @@ public class RobotHand extends Model {
         ringFinger.addRing(ring);
 
         robot.addChild(robotArmTranslate);
-        robotArmTranslate.addChild(arm);
-        arm.addChild(armTransform);
-        armTransform.addChild(armShape);
-        arm.addChild(handTranslate);
-        handTranslate.addChild(hand);
-        hand.addChild(handTransform);
-        handTransform.addChild(handShape);
-        hand.addChild(thumbNode);
-        hand.addChild(indexFingerNode);
-        hand.addChild(middleFingerNode);
-        hand.addChild(ringFingerNode);
-        hand.addChild(pinkyFingerNode);
+            robotArmTranslate.addChild(arm);
+                arm.addChild(armTransform);
+                    armTransform.addChild(armShape);
+                arm.addChild(handTranslate);
+                    handTranslate.addChild(hand);
+                        hand.addChild(handTransform);
+                            handTransform.addChild(handShape);
+                        hand.addChild(thumbNode);
+                        hand.addChild(indexFingerNode);
+                        hand.addChild(middleFingerNode);
+                        hand.addChild(ringFingerNode);
+                        hand.addChild(pinkyFingerNode);
 
         robot.update();
     }
@@ -139,10 +158,7 @@ public class RobotHand extends Model {
     }
 
     public void update(double delta) {
-        indexFingerAnim.update(delta);
-        pinkyFingerAnim.update(delta);
-        middleFingerAnim.update(delta);
-        ringFingerAnim.update(delta);
+        handAnim.update(delta);
     }
 
     public void neutralPosition() {
@@ -152,10 +168,7 @@ public class RobotHand extends Model {
         pinkyFinger.reset();
         thumb.reset();
 
-        indexFingerAnim.reset();
-        middleFingerAnim.reset();
-        ringFingerAnim.reset();
-        pinkyFingerAnim.reset();
+        handAnim.reset();
     }
 
     // TODO: Maybe a different letter
