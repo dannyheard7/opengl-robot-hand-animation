@@ -2,6 +2,7 @@ package scenegraph;
 
 import gmaths.Mat4;
 import gmaths.Vec3;
+import gmaths.Vec4;
 import lights.Light;
 import com.jogamp.opengl.*;
 import lights.SpotLight;
@@ -16,17 +17,17 @@ public class LightNode extends SGNode {
     }
 
     protected void update(Mat4 t) {
-        Vec3 pos = Mat4.multiply(t, new Vec3());
+        Vec3 pos = Mat4.multiply(t, new Vec4()).toVec3();
         light.setPosition(pos);
 
         if (light instanceof SpotLight) {
             SpotLight spotLight = (SpotLight) light;
-            Mat4 tTranspose = Mat4.transpose(t);
+            Vec3 spotlightDir = spotLight.getInitDirection();
 
-            Vec3 dir = Mat4.multiply(tTranspose, spotLight.getInitDirection());
+            // Because it is direction and not position, set homogeneous to 0
+            Vec3 dir = Mat4.multiply(t, new Vec4(spotlightDir, 0)).toVec3();
 
             spotLight.setDirection(dir);
-//            System.out.println(dir);
         }
 
         super.update(t);

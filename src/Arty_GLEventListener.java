@@ -37,6 +37,7 @@ public class Arty_GLEventListener implements GLEventListener {
     gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
     initialise(gl);
     startTime = getSeconds();
+    updatePerspectiveMatrices();
   }
   
   /* Called to indicate the drawing surface has been moved and/or resized  */
@@ -44,6 +45,7 @@ public class Arty_GLEventListener implements GLEventListener {
     GL3 gl = drawable.getGL().getGL3();
     gl.glViewport(x, y, width, height);
     aspect = (float)width/(float)height;
+    updatePerspectiveMatrices();
   }
 
   /* Draw */
@@ -130,7 +132,7 @@ public class Arty_GLEventListener implements GLEventListener {
  
   private void render(GL3 gl) {
     gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
-    updatePerspectiveMatrices();
+
 
     double elapsedTime = getSeconds()-startTime;
 
