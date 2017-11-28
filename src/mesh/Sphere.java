@@ -1,8 +1,9 @@
 package mesh;
 
-import gmaths.*;
-import com.jogamp.opengl.*;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL3;
 import core.Shader;
+import gmaths.Mat4;
 
 public class Sphere extends Mesh {
 

@@ -1,12 +1,17 @@
 package lights;
 
+import com.jogamp.common.nio.Buffers;
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL3;
+import core.Shader;
+import gmaths.Mat4;
+import gmaths.Mat4Transform;
+import gmaths.Vec3;
 import mesh.Camera;
 import mesh.Material;
-import core.Shader;
-import gmaths.*;
-import java.nio.*;
-import com.jogamp.common.nio.*;
-import com.jogamp.opengl.*;
+
+import java.nio.FloatBuffer;
+import java.nio.IntBuffer;
   
 abstract public class Light {
   

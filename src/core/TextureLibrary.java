@@ -1,9 +1,12 @@
 package core;
 
+import com.jogamp.opengl.GL;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.util.texture.spi.JPEGImage;
+
 import java.io.File;
 import java.io.FileInputStream;
-import com.jogamp.opengl.*;
-import com.jogamp.opengl.util.texture.spi.JPEGImage;
 
 public final class TextureLibrary {
     

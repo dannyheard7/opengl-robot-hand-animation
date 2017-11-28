@@ -1,11 +1,13 @@
-import mesh.Camera;
-import gmaths.*;
-import java.awt.*;
-import java.awt.event.*;
-import javax.swing.*;
-import com.jogamp.opengl.*;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
+import gmaths.Vec3;
+import mesh.Camera;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
 public class Arty extends JFrame implements ActionListener {
   

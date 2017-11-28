@@ -1,14 +1,17 @@
 package models;
 
-import core.TextureLibrary;
-import mesh.Camera;
-import lights.Light;
-import mesh.Mesh;
 import com.jogamp.opengl.GL3;
+import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
+import lights.Light;
+import mesh.Camera;
+import mesh.Mesh;
 import mesh.TwoTriangles;
-import scenegraph.*;
+import scenegraph.MeshNode;
+import scenegraph.NameNode;
+import scenegraph.SGNode;
+import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
@@ -39,7 +42,7 @@ public class Room extends Model {
     }
 
     private void setupSceneGraph() {
-        float roomHeight = 15;
+        float roomHeight = 16;
         float roomWidth = 16;
         float roomDepth = 16;
 
@@ -51,39 +54,39 @@ public class Room extends Model {
         MeshNode floorShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
 
         NameNode rightWall = new NameNode("right wall");
-        m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(90));
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(90)); // Get direction of texture correct
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, 0.5f));
+        m = Mat4Transform.scale(roomWidth, roomHeight , roomDepth);
+        m = Mat4.multiply(Mat4Transform.rotateAroundZ(90), m);
+        m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m); // Get direction of texture correct
+        m = Mat4.multiply(Mat4Transform.translate(roomWidth / 2, roomHeight / 2, 0), m);
         TransformNode rightWallTransform = new TransformNode("wall transform", m);
         MeshNode rightWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode leftWall = new NameNode("left wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundZ(-90));
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(90));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, -0.5f));
+        m = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), m);
+        m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m);
+        m = Mat4.multiply(Mat4Transform.translate(- roomWidth / 2, roomHeight /2, 0), m);
         TransformNode leftWallTransform = new TransformNode("wall transform", m);
         MeshNode leftWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode frontWall = new NameNode("front wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(-90));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, 0.5f));
+        m = Mat4.multiply(Mat4Transform.rotateAroundX(-90), m);
+        m = Mat4.multiply(Mat4Transform.translate(0, roomHeight / 2, roomDepth /2), m);
         TransformNode frontWallTransform = new TransformNode("wall transform", m);
         MeshNode frontWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode backWall = new NameNode("back wall");
         m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(90));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.5f, -0.5f));
+        m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m);
+        m = Mat4.multiply(Mat4Transform.translate(0, roomHeight / 2, -roomDepth /2), m);
         TransformNode backWallTransform = new TransformNode("wall transform", m);
         MeshNode backWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode ceiling = new NameNode("ceiling");
         m = Mat4Transform.scale(roomWidth, 1, roomDepth);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(180));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -roomHeight, 0));
+        m = Mat4.multiply(Mat4Transform.rotateAroundX(180), m);
+        m = Mat4.multiply(Mat4Transform.translate(0, roomHeight, 0), m);
         TransformNode ceilingTransform = new TransformNode("ceiling transform", m);
         MeshNode ceilingShape = new MeshNode("mesh.TwoTriangles(floorMesh)", ceilingMesh);
 

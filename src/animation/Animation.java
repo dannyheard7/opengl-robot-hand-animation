@@ -1,7 +1,5 @@
 package animation;
 
-import gmaths.Mat4;
-
 import java.util.LinkedList;
 import java.util.Map;
 

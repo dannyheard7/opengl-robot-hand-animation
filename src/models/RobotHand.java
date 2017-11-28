@@ -3,15 +3,15 @@ package models;
 import animation.Animation;
 import animation.KeyFrame;
 import animation.Position;
-import core.TextureLibrary;
-import mesh.Camera;
-import mesh.Cube;
-import lights.Light;
-import mesh.Mesh;
 import com.jogamp.opengl.GL3;
+import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
+import lights.Light;
+import mesh.Camera;
+import mesh.Cube;
+import mesh.Mesh;
 import scenegraph.MeshNode;
 import scenegraph.NameNode;
 import scenegraph.SGNode;
@@ -127,7 +127,7 @@ public class RobotHand extends Model {
 
         NameNode arm = new NameNode("arm");
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,armHeight / 2,0), m);
         TransformNode armTransform = new TransformNode("arm transform", m);
         MeshNode armShape = new MeshNode("mesh.Cube(arm)", armCube);
 
@@ -136,7 +136,7 @@ public class RobotHand extends Model {
         TransformNode handTranslate = new TransformNode("han translate", m);
 
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,handHeight / 2,0), m);
         TransformNode handTransform = new TransformNode("hand transform", m);
         MeshNode handShape = new MeshNode("mesh.Cube(hand)", handCube);
 

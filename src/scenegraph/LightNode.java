@@ -1,10 +1,10 @@
 package scenegraph;
 
+import com.jogamp.opengl.GL3;
 import gmaths.Mat4;
 import gmaths.Vec3;
 import gmaths.Vec4;
 import lights.Light;
-import com.jogamp.opengl.*;
 import lights.SpotLight;
 
 public class LightNode extends SGNode {

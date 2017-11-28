@@ -1,6 +1,6 @@
 package mesh;
 
-import gmaths.*;
+import gmaths.Vec3;
 
  /**
  * This class stores the mesh.Material properties for a mesh.Mesh

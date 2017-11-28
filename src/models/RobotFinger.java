@@ -1,14 +1,14 @@
 package models;
 
-import gmaths.Vec3;
-import core.TextureLibrary;
-import mesh.Camera;
-import lights.Light;
-import mesh.Mesh;
-import mesh.Sphere;
 import com.jogamp.opengl.GL3;
+import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
+import gmaths.Vec3;
+import lights.Light;
+import mesh.Camera;
+import mesh.Mesh;
+import mesh.Sphere;
 import scenegraph.MeshNode;
 import scenegraph.NameNode;
 import scenegraph.SGNode;
@@ -41,33 +41,34 @@ public class RobotFinger extends Model {
         this.fingerDepth = 1f;
         this.sectionHeight = sectionHeight;
         this.fingerPosition = Mat4Transform.translate(position);
+        float spacing = fingerWidth / 4;
 
         fingerTransform = new TransformNode("finger position", fingerPosition);
 
-        fingerBottomJointPosition = new Mat4(1);
+        fingerBottomJointPosition = Mat4Transform.translate(0, spacing, 0);
         fingerBottomJoint = new TransformNode("finger bottom joint", fingerBottomJointPosition);
 
         NameNode fingerBottom = new NameNode("finger bottom");
         Mat4 m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,sectionHeight / 2,0), m);
         TransformNode fingerBottomTransform = new TransformNode("finger bottom transform", m);
         MeshNode fingerBottomShape = new MeshNode("mesh.Sphere(finger bottom)", sphere);
 
-        fingerMiddleJointPosition = Mat4Transform.translate(0,  sectionHeight, 0);
+        fingerMiddleJointPosition = Mat4Transform.translate(0,  sectionHeight + spacing, 0);
         fingerMiddleJoint = new TransformNode("middle joint", fingerMiddleJointPosition);
 
         NameNode fingerMiddle = new NameNode("finger middle");
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,sectionHeight / 2,0), m);
         TransformNode fingerMiddleTransform = new TransformNode("finger middle transform", m);
         MeshNode fingerMiddleShape = new MeshNode("mesh.Sphere(finger middle)", sphere);
 
-        fingerTopJointPosition = Mat4Transform.translate(0,  sectionHeight, 0);
+        fingerTopJointPosition = Mat4Transform.translate(0,  sectionHeight + spacing, 0);
         fingerTopJoint = new TransformNode("finger top joint", fingerTopJointPosition);
 
         NameNode fingerTop = new NameNode("finger top");
         m = Mat4Transform.scale(fingerWidth, sectionHeight, fingerDepth);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,sectionHeight/2,0),  m);
         TransformNode fingerTopTransform = new TransformNode("finger top transform", m);
         MeshNode fingerTopShape = new MeshNode("mesh.Sphere(finger top)", sphere);
 
@@ -104,25 +105,14 @@ public class RobotFinger extends Model {
         finger.update();
     }
 
-    // TODO: change this to accept a float between 0-1 represent amount of curling
     public void curl(float angle) {
-        // If angle is less than 90, then spheres collide
-        double val = Math.abs(Math.sin(Math.toRadians(angle)));
-        float diff = (this.fingerWidth / 2) / (float)Math.exp(1-val);
-
-        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.translate(0, diff, 0));
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
-
+        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.rotateAroundX(angle));
         fingerBottomJoint.setTransform(m);
 
-        m = Mat4.multiply(fingerMiddleJointPosition, Mat4Transform.translate(0, diff, 0));
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
-
+        m = Mat4.multiply(fingerMiddleJointPosition, Mat4Transform.rotateAroundX(angle));
         fingerMiddleJoint.setTransform(m);
 
-        m = Mat4.multiply(fingerTopJointPosition, Mat4Transform.translate(0, diff, 0));
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(angle));
-
+        m = Mat4.multiply(fingerTopJointPosition, Mat4Transform.rotateAroundX(angle));
         fingerTopJoint.setTransform(m);
 
         finger.update();
@@ -137,10 +127,6 @@ public class RobotFinger extends Model {
 
     public void addRing(Ring ring) {
         fingerBottomJoint.addChild(ring.getSceneGraph());
-    }
-
-    public float getFingerWidth() {
-        return this.fingerWidth;
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

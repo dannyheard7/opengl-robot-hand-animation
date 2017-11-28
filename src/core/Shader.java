@@ -1,12 +1,14 @@
 package core;
 
-import gmaths.*;
+import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.util.glsl.ShaderCode;
+import com.jogamp.opengl.util.glsl.ShaderProgram;
+import gmaths.Vec3;
+
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.nio.charset.Charset;
-import com.jogamp.opengl.*;
-import com.jogamp.opengl.util.glsl.*;  
   
 public class Shader {
   

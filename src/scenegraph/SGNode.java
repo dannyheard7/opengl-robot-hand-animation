@@ -1,8 +1,9 @@
 package scenegraph;
 
-import gmaths.*;
+import com.jogamp.opengl.GL3;
+import gmaths.Mat4;
+
 import java.util.ArrayList;
-import com.jogamp.opengl.*;
 
 public class SGNode {
 

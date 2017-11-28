@@ -1,7 +1,6 @@
 package lights;
 
 import com.jogamp.opengl.GL3;
-import gmaths.Vec3;
 
 public class PointLight extends Light {
 

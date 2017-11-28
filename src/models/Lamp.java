@@ -1,14 +1,14 @@
 package models;
 
-import gmaths.Vec3;
-import core.TextureLibrary;
-import lights.PointLight;
-import mesh.Camera;
-import lights.Light;
-import mesh.Mesh;
 import com.jogamp.opengl.GL3;
+import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
+import gmaths.Vec3;
+import lights.Light;
+import lights.PointLight;
+import mesh.Camera;
+import mesh.Mesh;
 import mesh.Sphere;
 import scenegraph.*;
 
@@ -44,21 +44,19 @@ public class Lamp extends Model {
 
         NameNode base = new NameNode("base");
         Mat4 m = Mat4Transform.scale(1f, 0.2f,1f);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,0, 0), m);
         TransformNode baseTransform = new TransformNode("base transform", m);
         MeshNode baseShape = new MeshNode("mesh.Sphere(base)", sphere);
 
         NameNode tube = new NameNode("tube");
         m = Mat4Transform.scale(0.5f, 5f,0.5f);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0, 2.5f,0), m);
         TransformNode tubeTransform = new TransformNode("tube transform", m);
         MeshNode tubeShape = new MeshNode("mesh.Sphere(tube)", sphere);
 
-        // TODO: lamp scene graph like robot finger
-
         NameNode lightNameNode = new NameNode("light");
-        m = Mat4Transform.translate(0, 5.25f, 0f);
-        m = Mat4.multiply(m, Mat4Transform.scale(0.5f, 0.5f, 0.5f));
+        m = Mat4Transform.scale(0.5f, 0.5f, 0.5f);
+        m = Mat4.multiply(Mat4Transform.translate(0, 5.25f, 0f), m);
         TransformNode lightTransform = new TransformNode("light transform", m);
         LightNode lightShape = new LightNode("light.PointLight(lamp)", light);
 

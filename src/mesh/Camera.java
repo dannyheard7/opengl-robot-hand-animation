@@ -1,6 +1,8 @@
 package mesh;
 
-import gmaths.*;
+import gmaths.Mat4;
+import gmaths.Mat4Transform;
+import gmaths.Vec3;
 
 public class Camera {
   

@@ -1,15 +1,15 @@
 package models;
 
-import gmaths.Vec3;
-import core.TextureLibrary;
-import lights.SpotLight;
-import mesh.Camera;
-import lights.Light;
-import mesh.Mesh;
-import mesh.Sphere;
 import com.jogamp.opengl.GL3;
+import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
+import gmaths.Vec3;
+import lights.Light;
+import lights.SpotLight;
+import mesh.Camera;
+import mesh.Mesh;
+import mesh.Sphere;
 import scenegraph.*;
 
 import java.util.ArrayList;
@@ -43,18 +43,18 @@ public class Ring extends Model {
     private void setupSceneGraph() {
         ring = new NameNode("ring");
 
-        TransformNode ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.4f,0));
-        // TODO Move the ring translate to finger class
+        TransformNode ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.5f,0));
+        // TODO Move the ring translate to finger class?
 
         NameNode band = new NameNode("band");
         Mat4 m = Mat4Transform.scale(1f, 0.2f, 1.2f);
-        m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
+        m = Mat4.multiply(Mat4Transform.translate(0,0f,0), m);
         TransformNode bandTransform = new TransformNode("band rotate", m);
         MeshNode bandShape = new MeshNode("mesh.Sphere(band)", sphere);
 
         NameNode lightNameNode = new NameNode("light");
         m =  Mat4Transform.scale(0.2f, 0.2f, 0.2f);
-        m = Mat4.multiply(m, Mat4Transform.translate(0, 0.5f, -3f));
+        m = Mat4.multiply(Mat4Transform.translate(0, 0, -0.6f), m);
         TransformNode lightTransform = new TransformNode("light transform", m);
         LightNode lightShape = new LightNode("light.SpotLight(lamp)", light);
 

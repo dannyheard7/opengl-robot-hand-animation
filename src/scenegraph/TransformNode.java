@@ -1,7 +1,6 @@
 package scenegraph;
 
-import gmaths.*;
-import com.jogamp.opengl.*;
+import gmaths.Mat4;
 
 public class TransformNode extends SGNode {
 

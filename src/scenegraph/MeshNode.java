@@ -1,7 +1,7 @@
 package scenegraph;
 
+import com.jogamp.opengl.GL3;
 import mesh.Mesh;
-import com.jogamp.opengl.*;
 
 public class MeshNode extends SGNode {
 
