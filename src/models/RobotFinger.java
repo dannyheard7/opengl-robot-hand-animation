@@ -20,8 +20,8 @@ public class RobotFinger extends Model {
 
     private Mesh sphere;
     private NameNode finger;
-    private TransformNode fingerBottomJoint, fingerMiddleJoint, fingerTopJoint;
-    private Mat4 fingerBottomJointPosition, fingerMiddleJointPosition, fingerTopJointPosition;
+    private TransformNode fingerTransform, fingerBottomJoint, fingerMiddleJoint, fingerTopJoint;
+    private Mat4 fingerPosition, fingerBottomJointPosition, fingerMiddleJointPosition, fingerTopJointPosition;
 
     private float sectionHeight, fingerWidth, fingerDepth;
 
@@ -34,16 +34,17 @@ public class RobotFinger extends Model {
         sphere.setCamera(camera);
     }
 
-    public SGNode buildSceneGraph(String name, Vec3 position, Mat4 rotation, float sectionHeight) {
+    public SGNode buildSceneGraph(String name, Vec3 position, float sectionHeight) {
         finger = new NameNode(name);
 
         this.fingerWidth = 0.75f;
         this.fingerDepth = 1f;
         this.sectionHeight = sectionHeight;
+        this.fingerPosition = Mat4Transform.translate(position);
 
-        TransformNode fingerPosition = new TransformNode("finger position", Mat4Transform.translate(position));
+        fingerTransform = new TransformNode("finger position", fingerPosition);
 
-        fingerBottomJointPosition = rotation;
+        fingerBottomJointPosition = new Mat4(1);
         fingerBottomJoint = new TransformNode("finger bottom joint", fingerBottomJointPosition);
 
         NameNode fingerBottom = new NameNode("finger bottom");
@@ -70,8 +71,8 @@ public class RobotFinger extends Model {
         TransformNode fingerTopTransform = new TransformNode("finger top transform", m);
         MeshNode fingerTopShape = new MeshNode("mesh.Sphere(finger top)", sphere);
 
-        finger.addChild(fingerPosition);
-            fingerPosition.addChild(fingerBottomJoint);
+        finger.addChild(fingerTransform);
+            fingerTransform.addChild(fingerBottomJoint);
                 fingerBottomJoint.addChild(fingerBottom);
                     fingerBottom.addChild(fingerBottomTransform);
                         fingerBottomTransform.addChild(fingerBottomShape);
@@ -128,8 +129,8 @@ public class RobotFinger extends Model {
     }
 
     public void rotateAroundZ(float angle) {
-        Mat4 m = Mat4.multiply(fingerBottomJointPosition, Mat4Transform.rotateAroundZ(angle));
-        fingerBottomJoint.setTransform(m);
+        Mat4 m = Mat4.multiply(fingerPosition, Mat4Transform.rotateAroundZ(angle));
+        fingerTransform.setTransform(m);
 
         finger.update();
     }

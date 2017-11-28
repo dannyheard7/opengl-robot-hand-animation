@@ -18,6 +18,8 @@ import scenegraph.SGNode;
 import scenegraph.TransformNode;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class RobotHand extends Model {
 
@@ -27,7 +29,9 @@ public class RobotHand extends Model {
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
 
-    private Animation handAnim, middleFingerAnim, ringFingerAnim, pinkyFingerAnim, thumbAnim;
+    private Animation handAnim;
+    private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY;
+
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
@@ -52,7 +56,6 @@ public class RobotHand extends Model {
 
         ring = new Ring(gl, lights, camera);
 
-
         this.setupSceneGraph();
         this.setupAnimation();
     }
@@ -60,21 +63,54 @@ public class RobotHand extends Model {
     private void setupAnimation() {
         handAnim = new Animation(0.01f);
 
-        KeyFrame keyFrame1 = new KeyFrame();
         Position indexFingerStraight = new Position(0, indexFinger::curl);
-        keyFrame1.addPosition("Index Finger", indexFingerStraight);
         Position middleFingerStraight = new Position(0, middleFinger::curl);
-        keyFrame1.addPosition("Middle Finger", middleFingerStraight);
+        Position ringFingerStraight = new Position(0, ringFinger::curl);
+        Position pinkyFingerStraight = new Position(0, pinkyFinger::curl);
+        Position thumbStraight = new Position(0, thumb::curl);
+        Position pinkyFingerZRotation = new Position(0, pinkyFinger::rotateAroundZ);
+        Position thumbZRotation = new Position(-90, thumb::rotateAroundZ);
 
-        KeyFrame keyFrame2 = new KeyFrame();
+        Map<String, Position> neutralPositions = new LinkedHashMap<>();
+        neutralPositions.put("Index Finger", indexFingerStraight);
+        neutralPositions.put("Middle Finger", middleFingerStraight);
+        neutralPositions.put("Ring Finger", ringFingerStraight);
+        neutralPositions.put("Pinky Finger", pinkyFingerStraight);
+        neutralPositions.put("Thumb", thumbStraight);
+        neutralPositions.put("Pinky Finger Z Rotation", pinkyFingerZRotation);
+        neutralPositions.put("Thumb Z Rotation", thumbZRotation);
+
         Position indexFingerCurled = new Position(90, indexFinger::curl);
-        keyFrame2.addPosition("Index Finger", indexFingerCurled);
-        Position middleFingerCurled = new Position(50, middleFinger::curl);
-        keyFrame2.addPosition("Middle Finger", middleFingerCurled);
+        Position middleFingerCurled = new Position(90, middleFinger::curl);
+        Position ringFingerCurled = new Position(90, ringFinger::curl);
+        Position pinkyFingerCurled = new Position(90, pinkyFinger::curl);
 
-        handAnim.addKeyFrame(keyFrame1);
-        handAnim.addKeyFrame(keyFrame2);
-        handAnim.addKeyFrame(keyFrame1);
+        Map<String, Position> curledFingers = new LinkedHashMap<>(neutralPositions);
+        curledFingers.put("Index Finger", indexFingerCurled);
+        curledFingers.put("Middle Finger", middleFingerCurled);
+        curledFingers.put("Ring Finger", ringFingerCurled);
+        curledFingers.put("Pinky Finger", pinkyFingerCurled);
+
+        keyFrameNeutral = new KeyFrame(neutralPositions);
+
+        thumbZRotation = new Position(0, thumb::rotateAroundZ);
+
+        keyFrameA = new KeyFrame(curledFingers);
+        keyFrameA.addPosition("Thumb Z Rotation", thumbZRotation);
+
+        pinkyFingerZRotation = new Position(20, pinkyFinger::rotateAroundZ);
+        thumbZRotation = new Position(-70, thumb::rotateAroundZ);
+
+        keyFrameY = new KeyFrame(curledFingers);
+        keyFrameY.addPosition("Pinky Finger", pinkyFingerStraight);
+        keyFrameY.addPosition("Pinky Finger Z Rotation", pinkyFingerZRotation);
+        keyFrameY.addPosition("Thumb Z Rotation", thumbZRotation);
+
+        handAnim.addKeyFrame(keyFrameNeutral);
+        handAnim.addKeyFrame(keyFrameA);
+        handAnim.addKeyFrame(keyFrameNeutral);
+        handAnim.addKeyFrame(keyFrameY);
+        handAnim.addKeyFrame(keyFrameNeutral);
     }
 
     private void setupSceneGraph() {
@@ -85,24 +121,24 @@ public class RobotHand extends Model {
         float handWidth = 3f;
         float handScale = 1f;
 
-        robot = new NameNode("robot armCube");
+        robot = new NameNode("robot arm");
 
-        TransformNode robotArmTranslate = new TransformNode("armCube translate", Mat4Transform.translate(0,0,0));
+        TransformNode robotArmTranslate = new TransformNode("arm translate", Mat4Transform.translate(0,0,0));
 
-        NameNode arm = new NameNode("armCube");
+        NameNode arm = new NameNode("arm");
         Mat4 m = Mat4Transform.scale(armScale, armHeight,armScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode armTransform = new TransformNode("armCube transform", m);
-        MeshNode armShape = new MeshNode("mesh.Cube(armCube)", armCube);
+        TransformNode armTransform = new TransformNode("arm transform", m);
+        MeshNode armShape = new MeshNode("mesh.Cube(arm)", armCube);
 
-        NameNode hand = new NameNode("handCube");
+        NameNode hand = new NameNode("hand");
         m = Mat4Transform.translate(0, armHeight, 0);
-        TransformNode handTranslate = new TransformNode("handCube translate", m);
+        TransformNode handTranslate = new TransformNode("han translate", m);
 
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(m, Mat4Transform.translate(0,0.5f,0));
-        TransformNode handTransform = new TransformNode("handCube transform", m);
-        MeshNode handShape = new MeshNode("mesh.Cube(handCube)", handCube);
+        TransformNode handTransform = new TransformNode("hand transform", m);
+        MeshNode handShape = new MeshNode("mesh.Cube(hand)", handCube);
 
         float dist = 2.5f  / 3;
 
@@ -111,14 +147,14 @@ public class RobotHand extends Model {
         Vec3 ringPos = new Vec3((-1.25f+dist), handHeight, 0f);
         Vec3 pinkyPos = new Vec3(-1.25f, handHeight, 0f);
         Vec3 thumbPos = new Vec3(1.5f, handHeight / 2, 0f);
-        Mat4 fingerRoate = Mat4Transform.rotateAroundX(0);
-        Mat4 thumbRotate = Mat4Transform.rotateAroundZ(-90);
 
-        SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, fingerRoate, 1f);
-        SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, fingerRoate, 1.25f);
-        SGNode ringFingerNode = ringFinger.buildSceneGraph("models.Ring Finger", ringPos, fingerRoate,1f);
-        SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos, fingerRoate,0.75f);
-        SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, thumbRotate, 0.75f);
+        SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, 1f);
+        SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, 1.25f);
+        SGNode ringFingerNode = ringFinger.buildSceneGraph("models.Ring Finger", ringPos,1f);
+        SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos,0.75f);
+        SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, 0.75f);
+
+        thumb.rotateAroundZ(-90);
 
         ringFinger.addRing(ring);
 
@@ -162,12 +198,7 @@ public class RobotHand extends Model {
     }
 
     public void neutralPosition() {
-        indexFinger.reset();
-        middleFinger.reset();
-        ringFinger.reset();
-        pinkyFinger.reset();
-        thumb.reset();
-
+        keyFrameNeutral.show();
         handAnim.reset();
     }
 
@@ -177,7 +208,6 @@ public class RobotHand extends Model {
 
         thumb.curl(60);
 
-        // Need a way to be able to curl and transform a finger without one resetting the other
         middleFinger.curl(90);
         ringFinger.curl(90);
         pinkyFinger.curl(90);
@@ -197,35 +227,11 @@ public class RobotHand extends Model {
     }
 
     public void positionA() {
-        this.neutralPosition();
-
-        // thumb rotated upwards
-        //Mat4 m = Mat4Transform.rotateAroundZ(90);
-       // m = Mat4.multiply(m, Mat4Transform.translate(thumb.getFingerWidth() / 2, 0, 0));
-
-        //thumb.transformFinger(m);
-
-        thumb.rotateAroundZ(90);
-
-        // Index, Middle, models.Ring & pinky folded
-        indexFinger.curl(90);
-        middleFinger.curl(90);
-        ringFinger.curl(90);
-        pinkyFinger.curl(90);
+        keyFrameA.show();
     }
 
     public void positionY() {
-        this.neutralPosition();
-
-        // Pinky Finger rotated away & thumb towards other fingers
-
-        pinkyFinger.rotateAroundZ(20);
-        thumb.rotateAroundZ(20);
-
-        // models.Ring, Middle & index folded
-        indexFinger.curl(90);
-        middleFinger.curl(90);
-        ringFinger.curl(90);
+        keyFrameY.show();
     }
 
 

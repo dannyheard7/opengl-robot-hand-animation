@@ -14,7 +14,6 @@ import scenegraph.*;
 
 import java.util.ArrayList;
 
-// TODO: Restructure this into a general model class
 public class Lamp extends Model {
 
     private Mesh sphere;
@@ -36,8 +35,6 @@ public class Lamp extends Model {
         sphere.setCamera(camera);
 
         this.setupSceneGraph();
-
-
     }
 
     private void setupSceneGraph() {

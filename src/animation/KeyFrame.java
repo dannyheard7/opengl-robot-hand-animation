@@ -16,14 +16,24 @@ public class KeyFrame {
     }
 
     public KeyFrame(Map<String, Position> positions) {
-        this.positions = positions;
+        this.positions = new LinkedHashMap<>(positions);
     }
 
-    public void addPosition(String objectName, Position position) {
-        positions.put(objectName, position);
+    public void addPosition(String positionName, Position position) {
+        positions.put(positionName, position);
+    }
+
+    public void addPositions(Map<String, Position> positions) {
+        this.positions.putAll(positions);
     }
 
     public Map<String, Position> getPositions() {
         return  this.positions;
+    }
+
+    public void show() {
+        for (Position position : this.positions.values()) {
+            position.getPositionFunc().accept(position.getValue());
+        }
     }
 }

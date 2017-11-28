@@ -1,5 +1,7 @@
 package animation;
 
+import gmaths.Mat4;
+
 import java.util.LinkedList;
 import java.util.Map;
 
@@ -36,25 +38,25 @@ public class Animation {
                 Position nextFramePosition = nextFramePositions.get(key);
                 Position prevFramePosition = prevFramePositions.get(key);
 
+
                 float prevVal = prevFramePosition.getValue();
                 float nextVal = nextFramePosition.getValue();
                 int direction = Float.compare(nextVal, prevVal);
 
-                float diff = nextVal - prevVal;
-                float curVal = diff*time + step*direction;
 
-                if (direction == -1) {
-                    curVal = prevVal + curVal;
+                if(direction != 0) {
+                    float diff = nextVal - prevVal;
+                    float curVal = prevVal + (diff * time + step);
+
+                    // Stop animation overshotting and continuing
+                    if (direction < 0 && curVal < nextVal || direction > 0 && curVal > nextVal) {
+                        curVal = nextVal;
+                    } else {
+                        progressFrame = false;
+                    }
+
+                    prevFramePosition.getPositionFunc().accept(curVal);
                 }
-
-                // Stop animation overshotting and continuing
-                if (direction < 0 && curVal < nextVal || direction > 0 && curVal > nextVal) {
-                    curVal = nextVal;
-                } else {
-                    progressFrame = false;
-                }
-
-                prevFramePosition.getPositionFunc().accept(curVal);
             }
             time += step;
 
