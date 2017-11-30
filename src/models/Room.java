@@ -15,7 +15,6 @@ import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
-// TODO: Restructure this into a general model class
 public class Room extends Model {
 
     private Mesh floorMesh, wallMesh, ceilingMesh;

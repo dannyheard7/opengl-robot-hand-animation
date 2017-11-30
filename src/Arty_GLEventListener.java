@@ -35,6 +35,10 @@ public class Arty_GLEventListener implements GLEventListener {
     gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
     gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
     gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
+
+    gl.glEnable(GL.GL_BLEND); // Enable alpha texture for window
+    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+
     initialise(gl);
     startTime = getSeconds();
     updatePerspectiveMatrices();

@@ -60,6 +60,8 @@ struct Material {
 
 uniform Material material;
 
+/* Light calculation code is from learnopengl.com */
+
 vec3 CalcDirLight(DirLight light, vec3 normal, vec3 viewDir)
 {
      vec3 lightDir = normalize(-light.direction);
@@ -96,7 +98,6 @@ vec3 CalcPointLight(PointLight light, vec3 normal, vec3 fragPos, vec3 viewDir)
     return (ambient + diffuse + specular);
 }
 
-// Code copied from learnopengl
 vec3 CalcSpotLight(SpotLight light, vec3 normal, vec3 fragPos, vec3 viewDir) {
     vec3 lightDir = normalize(light.position - fragPos);
 
@@ -138,6 +139,8 @@ void main() {
         result += CalcPointLight(pointLights[i], norm, fragPos,  viewDir);
 
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
+
+  //float alpha = texture(first_texture, ourTexCoord).g;
 
   fragColor = vec4(result, 1.0);
 }

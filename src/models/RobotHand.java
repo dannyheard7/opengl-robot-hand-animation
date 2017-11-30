@@ -30,7 +30,7 @@ public class RobotHand extends Model {
     private Ring ring;
 
     private Animation handAnim;
-    private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY;
+    private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY, keyFramePeace;
 
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
@@ -61,13 +61,14 @@ public class RobotHand extends Model {
     }
 
     private void setupAnimation() {
-        handAnim = new Animation(0.01f);
-
         Position indexFingerStraight = new Position(0, indexFinger::curl);
         Position middleFingerStraight = new Position(0, middleFinger::curl);
         Position ringFingerStraight = new Position(0, ringFinger::curl);
         Position pinkyFingerStraight = new Position(0, pinkyFinger::curl);
         Position thumbStraight = new Position(0, thumb::curl);
+
+        Position indexFingerZRotation = new Position(0, indexFinger::rotateAroundZ);
+        Position middleFingerZRotation = new Position(0, middleFinger::rotateAroundZ);
         Position pinkyFingerZRotation = new Position(0, pinkyFinger::rotateAroundZ);
         Position thumbZRotation = new Position(-90, thumb::rotateAroundZ);
 
@@ -77,6 +78,8 @@ public class RobotHand extends Model {
         neutralPositions.put("Ring Finger", ringFingerStraight);
         neutralPositions.put("Pinky Finger", pinkyFingerStraight);
         neutralPositions.put("Thumb", thumbStraight);
+        neutralPositions.put("Index Finger Z Rotation", indexFingerZRotation);
+        neutralPositions.put("Middle Finger Z Rotation", middleFingerZRotation);
         neutralPositions.put("Pinky Finger Z Rotation", pinkyFingerZRotation);
         neutralPositions.put("Thumb Z Rotation", thumbZRotation);
 
@@ -91,12 +94,18 @@ public class RobotHand extends Model {
         curledFingers.put("Ring Finger", ringFingerCurled);
         curledFingers.put("Pinky Finger", pinkyFingerCurled);
 
+        // Neutral
+
         keyFrameNeutral = new KeyFrame(neutralPositions);
+
+        // Letter A
 
         thumbZRotation = new Position(0, thumb::rotateAroundZ);
 
         keyFrameA = new KeyFrame(curledFingers);
         keyFrameA.addPosition("Thumb Z Rotation", thumbZRotation);
+
+        //Letter Y
 
         pinkyFingerZRotation = new Position(20, pinkyFinger::rotateAroundZ);
         thumbZRotation = new Position(-70, thumb::rotateAroundZ);
@@ -106,10 +115,26 @@ public class RobotHand extends Model {
         keyFrameY.addPosition("Pinky Finger Z Rotation", pinkyFingerZRotation);
         keyFrameY.addPosition("Thumb Z Rotation", thumbZRotation);
 
+        // Peace sign
+
+        indexFingerZRotation = new Position(-15, indexFinger::rotateAroundZ);
+        middleFingerZRotation = new Position(15, middleFinger::rotateAroundZ);
+        thumbStraight = new Position(90, thumb::curl);
+
+        keyFramePeace = new KeyFrame(curledFingers);
+        keyFramePeace.addPosition("Index Finger", indexFingerStraight);
+        keyFramePeace.addPosition("Middle Finger", middleFingerStraight);
+        keyFramePeace.addPosition("Index Finger Z Rotation", indexFingerZRotation);
+        keyFramePeace.addPosition("Middle Finger Z Rotation", middleFingerZRotation);
+        keyFramePeace.addPosition("Thumb", thumbStraight);
+
+        handAnim = new Animation(0.01f);
         handAnim.addKeyFrame(keyFrameNeutral);
         handAnim.addKeyFrame(keyFrameA);
         handAnim.addKeyFrame(keyFrameNeutral);
         handAnim.addKeyFrame(keyFrameY);
+        handAnim.addKeyFrame(keyFrameNeutral);
+        handAnim.addKeyFrame(keyFramePeace);
         handAnim.addKeyFrame(keyFrameNeutral);
     }
 
