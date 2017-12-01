@@ -25,12 +25,14 @@ public class RobotHand extends Model {
 
     private Mesh handCube, armCube;
     private SGNode robot;
+    private TransformNode handTransform;
+    private Mat4 handPosition;
 
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
 
     private Animation handAnim;
-    private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY, keyFramePeace;
+    private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY, keyFrameH, keyFramePeace;
 
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
@@ -72,6 +74,8 @@ public class RobotHand extends Model {
         Position pinkyFingerZRotation = new Position(0, pinkyFinger::rotateAroundZ);
         Position thumbZRotation = new Position(-90, thumb::rotateAroundZ);
 
+        Position handZRotation = new Position(0, this::rotateAroundZ);
+
         Map<String, Position> neutralPositions = new LinkedHashMap<>();
         neutralPositions.put("Index Finger", indexFingerStraight);
         neutralPositions.put("Middle Finger", middleFingerStraight);
@@ -82,6 +86,7 @@ public class RobotHand extends Model {
         neutralPositions.put("Middle Finger Z Rotation", middleFingerZRotation);
         neutralPositions.put("Pinky Finger Z Rotation", pinkyFingerZRotation);
         neutralPositions.put("Thumb Z Rotation", thumbZRotation);
+        neutralPositions.put("Hand Z Rotation", handZRotation);
 
         Position indexFingerCurled = new Position(90, indexFinger::curl);
         Position middleFingerCurled = new Position(90, middleFinger::curl);
@@ -115,6 +120,16 @@ public class RobotHand extends Model {
         keyFrameY.addPosition("Pinky Finger Z Rotation", pinkyFingerZRotation);
         keyFrameY.addPosition("Thumb Z Rotation", thumbZRotation);
 
+        // Letter H
+        thumbStraight = new Position(90, thumb::curl);
+        handZRotation = new Position(70, this::rotateAroundZ);
+
+        keyFrameH = new KeyFrame(curledFingers);
+        keyFrameH.addPosition("Index Finger", indexFingerStraight);
+        keyFrameH.addPosition("Middle Finger", middleFingerStraight);
+        keyFrameH.addPosition("Thumb", thumbStraight);
+        keyFrameH.addPosition("Hand Z Rotation", handZRotation);
+
         // Peace sign
 
         indexFingerZRotation = new Position(-15, indexFinger::rotateAroundZ);
@@ -134,13 +149,15 @@ public class RobotHand extends Model {
         handAnim.addKeyFrame(keyFrameNeutral);
         handAnim.addKeyFrame(keyFrameY);
         handAnim.addKeyFrame(keyFrameNeutral);
+        handAnim.addKeyFrame(keyFrameH);
+        handAnim.addKeyFrame(keyFrameNeutral);
         handAnim.addKeyFrame(keyFramePeace);
         handAnim.addKeyFrame(keyFrameNeutral);
     }
 
     private void setupSceneGraph() {
         float armHeight = 3f;
-        float armScale = 1.25f;
+        float armScale = 0.5f;
 
         float handHeight = 1.5f;
         float handWidth = 3f;
@@ -157,8 +174,8 @@ public class RobotHand extends Model {
         MeshNode armShape = new MeshNode("mesh.Cube(arm)", armCube);
 
         NameNode hand = new NameNode("hand");
-        m = Mat4Transform.translate(0, armHeight, 0);
-        TransformNode handTranslate = new TransformNode("han translate", m);
+        handPosition = Mat4Transform.translate(0, armHeight, 0);
+        handTransform = new TransformNode("hand translate", handPosition);
 
         m = Mat4Transform.scale(handWidth, handHeight, handScale);
         m = Mat4.multiply(Mat4Transform.translate(0,handHeight / 2,0), m);
@@ -187,8 +204,8 @@ public class RobotHand extends Model {
             robotArmTranslate.addChild(arm);
                 arm.addChild(armTransform);
                     armTransform.addChild(armShape);
-                arm.addChild(handTranslate);
-                    handTranslate.addChild(hand);
+                arm.addChild(this.handTransform);
+                    this.handTransform.addChild(hand);
                         hand.addChild(handTransform);
                             handTransform.addChild(handShape);
                         hand.addChild(thumbNode);
@@ -203,7 +220,6 @@ public class RobotHand extends Model {
     public void render(GL3 gl) {
         robot.draw(gl);
     }
-
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
         handCube.setPerspective(perspective);
@@ -227,36 +243,27 @@ public class RobotHand extends Model {
         handAnim.reset();
     }
 
-    // TODO: Maybe a different letter
-    public void positionD() {
-        this.neutralPosition();
-
-        thumb.curl(60);
-
-        middleFinger.curl(90);
-        ringFinger.curl(90);
-        pinkyFinger.curl(90);
-
-        Mat4 m = Mat4Transform.rotateAroundZ(-10);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundX(55));
-        m = Mat4.multiply(m, Mat4Transform.translate(0, -0.05f, -0.30f));
-        thumb.transformFinger(m);
-
-        // Need to move all fingers towards thumb slightly
-        m = Mat4Transform.rotateAroundX(40);
-        m = Mat4.multiply(m, Mat4Transform.rotateAroundY(15));
-
-        middleFinger.transformFinger(m);
-        ringFinger.transformFinger(m);
-        pinkyFinger.transformFinger(m);
-    }
-
     public void positionA() {
         keyFrameA.show();
     }
 
     public void positionY() {
         keyFrameY.show();
+    }
+
+    public void positionH() {
+        keyFrameH.show();
+    }
+
+    public void peaceGesture() {
+        keyFramePeace.show();
+    }
+
+    public void rotateAroundZ(float angle) {
+        Mat4 m = Mat4.multiply(handPosition, Mat4Transform.rotateAroundZ(angle));
+        handTransform.setTransform(m);
+
+        robot.update();
     }
 
 

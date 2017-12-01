@@ -92,11 +92,6 @@ public class Arty_GLEventListener implements GLEventListener {
     robotHand.neutralPosition();
     animation = false;
   }
-
-  public void letterD() {
-    robotHand.positionD();
-
-  }
   
   public void letterA() {
     robotHand.positionA();
@@ -106,6 +101,15 @@ public class Arty_GLEventListener implements GLEventListener {
   public void letterY() {
     robotHand.positionY();
   }
+
+  public void letterH() {
+    robotHand.positionH();
+  }
+
+  public void peaceGesture() {
+    robotHand.peaceGesture();
+  }
+
 
 
   private Camera camera;
