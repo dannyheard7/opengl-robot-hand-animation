@@ -17,20 +17,26 @@ abstract public class Light {
   
   protected Material material;
 
-  private Vec3 position;
+  private Vec3 position, lightColor, cubeColor;
   private Mat4 model;
   private Shader shader;
   private Camera camera;
   private Mat4 perspective;
+
+  private boolean enabled;
     
-  public Light(GL3 gl) {
+  public Light(GL3 gl, Vec3 color) {
+    this.lightColor = color;
+    this.cubeColor = color;
+
     material = new Material();
-    material.setAmbient(1.0f, 1.0f, 1.0f);
-    material.setDiffuse(1.0f, 1.0f, 1.0f);
-    material.setSpecular(1.0f, 1.0f, 1.0f);
+    this.enable();
+
     position = new Vec3(0, 0, 0);
     model = new Mat4(1);
     shader = new Shader(gl, "shaders/vs_light.glsl", "shaders/fs_light.glsl");
+
+
     fillBuffers(gl);
   }
   
@@ -44,6 +50,24 @@ abstract public class Light {
     position.x = x;
     position.y = y;
     position.z = z;
+  }
+
+  public void disable() {
+    material.setAmbient(0, 0, 0);
+    material.setDiffuse(0, 0, 0);
+    material.setSpecular(0, 0 ,0);
+    this.cubeColor = new Vec3(0, 0, 0);
+
+    enabled = false;
+  }
+
+  public void enable() {
+    material.setAmbient(lightColor);
+    material.setDiffuse(lightColor);
+    material.setSpecular(lightColor);
+    this.cubeColor = lightColor;
+
+    enabled = true;
   }
   
   public Vec3 getPosition() {
@@ -75,7 +99,8 @@ abstract public class Light {
     
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
-  
+    shader.setVec3(gl, "lightColor", cubeColor);
+
     gl.glBindVertexArray(vertexArrayId[0]);
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
     gl.glBindVertexArray(0);
@@ -86,6 +111,7 @@ abstract public class Light {
 
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
+    shader.setVec3(gl, "lightColor", cubeColor);
 
     gl.glBindVertexArray(vertexArrayId[0]);
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
@@ -160,6 +186,9 @@ abstract public class Light {
     gl.glBindBuffer(GL.GL_ELEMENT_ARRAY_BUFFER, elementBufferId[0]);
     gl.glBufferData(GL.GL_ELEMENT_ARRAY_BUFFER, Integer.BYTES * indices.length, ib, GL.GL_STATIC_DRAW);
     gl.glBindVertexArray(0);
-  } 
+  }
 
+  public boolean isEnabled() {
+    return enabled;
+  }
 }

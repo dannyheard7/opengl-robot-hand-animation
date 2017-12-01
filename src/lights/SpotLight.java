@@ -8,8 +8,8 @@ public class SpotLight extends Light {
     private float constant, linear, quadratic, cutOff, outerCutOff;
     private Vec3 initDirection, curDirection;
 
-    public SpotLight(GL3 gl, float constant, float linear, float quadratic, Vec3 direction, float cutOff, float outerCutOff) {
-        super(gl);
+    public SpotLight(GL3 gl, Vec3 color, float constant, float linear, float quadratic, Vec3 direction, float cutOff, float outerCutOff) {
+        super(gl, color);
 
         this.constant = constant;
         this.linear = linear;

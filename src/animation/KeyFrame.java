@@ -6,9 +6,6 @@ import java.util.function.Consumer;
 
 public class KeyFrame {
 
-    private float value;
-    private Consumer<Float> func;
-
     private Map<String, Position> positions;
 
     public KeyFrame() {

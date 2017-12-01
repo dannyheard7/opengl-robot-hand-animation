@@ -38,10 +38,13 @@ public class Arty extends JFrame implements ActionListener {
     getContentPane().add(canvas, BorderLayout.CENTER);
 
     JPanel p = new JPanel();
-      JButton b = new JButton("camera X");
+      JButton b = new JButton("Toggle World Light");
       b.addActionListener(this);
       p.add(b);
-      b = new JButton("camera Z");
+      b = new JButton("Toggle Lamp 1");
+      b.addActionListener(this);
+      p.add(b);
+      b = new JButton("Toggle Lamp 2");
       b.addActionListener(this);
       p.add(b);
       b = new JButton("start");
@@ -80,14 +83,16 @@ public class Arty extends JFrame implements ActionListener {
   }
   
   public void actionPerformed(ActionEvent e) {
-    if (e.getActionCommand().equalsIgnoreCase("camera X")) {
-      camera.setCamera(Camera.CameraType.X);
-      canvas.requestFocusInWindow();
-    }
-    else if (e.getActionCommand().equalsIgnoreCase("camera Z")) {
-      camera.setCamera(Camera.CameraType.Z);
-      canvas.requestFocusInWindow();
-    }
+
+      if (e.getActionCommand().equalsIgnoreCase("Toggle World Light")) {
+          glEventListener.toggleWordLight();
+      }
+      else if (e.getActionCommand().equalsIgnoreCase("Toggle Lamp 1")) {
+          glEventListener.toggleLamp1();
+      }
+      else if (e.getActionCommand().equalsIgnoreCase("Toggle Lamp 2")) {
+          glEventListener.toggleLamp2();
+      }
     else if (e.getActionCommand().equalsIgnoreCase("start")) {
       glEventListener.startAnimation();
     }
@@ -109,8 +114,6 @@ public class Arty extends JFrame implements ActionListener {
     else if (e.getActionCommand().equalsIgnoreCase("Peace")) {
       glEventListener.peaceGesture();
     }
-    else if(e.getActionCommand().equalsIgnoreCase("quit"))
-      System.exit(0);
   }
   
 }

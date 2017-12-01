@@ -23,7 +23,8 @@ public class Lamp extends Model {
     private PointLight light;
 
     public Lamp(GL3 gl, ArrayList<Light> lights, Camera camera) {
-        light = new PointLight(gl, 1.0f, 0.09f,0.032f);
+        Vec3 lightColor = new Vec3(1f, 1f, 1f);
+        light = new PointLight(gl, lightColor, 1.0f, 0.09f,0.032f);
         light.setCamera(camera);
         lights.add(light); // Shallow copying, might this cause problems?
 

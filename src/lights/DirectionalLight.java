@@ -7,8 +7,8 @@ public class DirectionalLight extends Light {
 
     private Vec3 direction;
 
-    public DirectionalLight(GL3 gl, Vec3 direction) {
-        super(gl);
+    public DirectionalLight(GL3 gl, Vec3 color, Vec3 direction) {
+        super(gl, color);
 
         material.setAmbient(0.5f, 0.5f, 0.5f);
         material.setDiffuse(0.5f, 0.5f, 0.5f);

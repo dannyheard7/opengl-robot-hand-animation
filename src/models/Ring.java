@@ -26,7 +26,8 @@ public class Ring extends Model {
         float cutOff = (float)Math.cos(Math.toRadians(12.5f));
         float outerCutOff = (float)Math.cos(Math.toRadians(17.5f));
 
-        light = new SpotLight(gl, 1.0f, 0.14f,0.07f, lightDirection, cutOff, outerCutOff);
+        Vec3 lightColor = new Vec3(0.5f, 0.5f, 1f);
+        light = new SpotLight(gl, lightColor,1.0f, 0.14f,0.07f, lightDirection, cutOff, outerCutOff);
         light.setCamera(camera);
         lights.add(light);
 

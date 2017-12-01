@@ -16,163 +16,184 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Arty_GLEventListener implements GLEventListener {
-  
-  private static final boolean DISPLAY_SHADERS = false;
-  private float aspect;
 
-  public Arty_GLEventListener(Camera camera) {
-    this.camera = camera;
-  }
+    private static final boolean DISPLAY_SHADERS = false;
+    private float aspect;
 
-  /* Initialisation */
-  public void init(GLAutoDrawable drawable) {   
-    GL3 gl = drawable.getGL().getGL3();
-    System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
-    gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f); 
-    gl.glClearDepth(1.0f);
-    gl.glEnable(GL.GL_DEPTH_TEST);
-    gl.glDepthFunc(GL.GL_LESS);
-    gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
-    gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
-    gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
+    public Arty_GLEventListener(Camera camera) {
+        this.camera = camera;
+    }
 
-    gl.glEnable(GL.GL_BLEND); // Enable alpha texture for window
-    gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
+    /* Initialisation */
+    public void init(GLAutoDrawable drawable) {
+        GL3 gl = drawable.getGL().getGL3();
+        System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        gl.glClearDepth(1.0f);
+        gl.glEnable(GL.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL.GL_LESS);
+        gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
+        gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
+        gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
 
-    initialise(gl);
-    startTime = getSeconds();
-    updatePerspectiveMatrices();
-  }
-  
-  /* Called to indicate the drawing surface has been moved and/or resized  */
-  public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-    GL3 gl = drawable.getGL().getGL3();
-    gl.glViewport(x, y, width, height);
-    aspect = (float)width/(float)height;
-    updatePerspectiveMatrices();
-  }
+        gl.glEnable(GL.GL_BLEND); // Enable alpha texture for window
+        gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
 
-  /* Draw */
-  public void display(GLAutoDrawable drawable) {
-    GL3 gl = drawable.getGL().getGL3();
-    render(gl);
-  }
+        initialise(gl);
+        startTime = getSeconds();
+        updatePerspectiveMatrices();
+    }
 
-  /* Clean up memory, if necessary */
-  public void dispose(GLAutoDrawable drawable) {
-    GL3 gl = drawable.getGL().getGL3();
-    disposeMeshes(gl);
-  }
+    /* Called to indicate the drawing surface has been moved and/or resized  */
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        GL3 gl = drawable.getGL().getGL3();
+        gl.glViewport(x, y, width, height);
+        aspect = (float) width / (float) height;
+        updatePerspectiveMatrices();
+    }
 
-  // ***************************************************
-  /* TIME
-   */ 
-  
-  private double startTime;
-  
-  private double getSeconds() {
-    return System.currentTimeMillis()/1000.0;
-  }
+    /* Draw */
+    public void display(GLAutoDrawable drawable) {
+        GL3 gl = drawable.getGL().getGL3();
+        render(gl);
+    }
 
-  private boolean animation = false;
-  private double savedTime = 0;
-   
-  public void startAnimation() {
-    animation = true;
-    startTime = getSeconds()-savedTime;
-  }
-   
-  public void stopAnimation() {
-    animation = false;
-    double elapsedTime = getSeconds()-startTime;
-    savedTime = elapsedTime;
-  }
+    /* Clean up memory, if necessary */
+    public void dispose(GLAutoDrawable drawable) {
+        GL3 gl = drawable.getGL().getGL3();
+        disposeMeshes(gl);
+    }
 
-  public void resetHand() {
-    robotHand.neutralPosition();
-    animation = false;
-  }
-  
-  public void letterA() {
-    robotHand.positionA();
+    // ***************************************************
+    /* TIME
+     */
 
-  }
-   
-  public void letterY() {
-    robotHand.positionY();
-  }
+    private double startTime;
 
-  public void letterH() {
-    robotHand.positionH();
-  }
+    private double getSeconds() {
+        return System.currentTimeMillis() / 1000.0;
+    }
 
-  public void peaceGesture() {
-    robotHand.peaceGesture();
-  }
+    private boolean animation = false;
+    private double savedTime = 0;
 
+    public void startAnimation() {
+        animation = true;
+        startTime = getSeconds() - savedTime;
+    }
 
+    public void stopAnimation() {
+        animation = false;
+        double elapsedTime = getSeconds() - startTime;
+        savedTime = elapsedTime;
+    }
 
-  private Camera camera;
-  private Mat4 perspective;
+    public void resetHand() {
+        robotHand.neutralPosition();
+        animation = false;
+    }
 
-  private DirectionalLight dirLight;
+    public void letterA() {
+        robotHand.positionA();
 
-  private RobotHand robotHand;
-  private Lamp lamp, lamp2;
-  private Room room;
+    }
 
-  
-  private void initialise(GL3 gl) {
-    dirLight = new DirectionalLight(gl,  new Vec3(-0.2f, -1.0f, -0.3f));
-    dirLight.setCamera(camera);
+    public void letterY() {
+        robotHand.positionY();
+    }
 
-    ArrayList<Light> lights = new ArrayList<>(Arrays.asList(dirLight));
+    public void letterH() {
+        robotHand.positionH();
+    }
 
-    lamp = new Lamp(gl, lights, camera);
-    lamp.setPosition(new Vec3(-4, 0, 6));
+    public void peaceGesture() {
+        robotHand.peaceGesture();
+    }
 
-    lamp2 = new Lamp(gl, lights, camera);
-    lamp2.setPosition(new Vec3(4, 0, -6));
+    public void toggleWordLight() {
+        if (worldLight.isEnabled())
+            worldLight.disable();
+        else
+            worldLight.enable();
+    }
 
-    room = new Room(gl, lights, camera);
-    robotHand = new RobotHand(gl, lights, camera);
-  }
- 
-  private void render(GL3 gl) {
-    gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+    public void toggleLamp1() {
+        if (lamp.getLight().isEnabled())
+            lamp.getLight().disable();
+        else
+            lamp.getLight().enable();
+    }
+
+    public void toggleLamp2() {
+        if (lamp2.getLight().isEnabled())
+            lamp2.getLight().disable();
+        else
+            lamp2.getLight().enable();
+    }
 
 
-    double elapsedTime = getSeconds()-startTime;
+    private Camera camera;
+    private Mat4 perspective;
 
-    dirLight.render(gl);
+    private DirectionalLight worldLight;
 
-    lamp.render(gl);
-    lamp2.render(gl);
+    private RobotHand robotHand;
+    private Lamp lamp, lamp2;
+    private Room room;
 
-    room.render(gl);
 
-    if (animation) robotHand.update(elapsedTime);
-    robotHand.render(gl);
-  }
-    
-  private void updatePerspectiveMatrices() {
-    // needs to be changed if user resizes the window
-    perspective = Mat4Transform.perspective(45, aspect);
-    dirLight.setPerspective(perspective);
+    private void initialise(GL3 gl) {
+        Vec3 lightColor = new Vec3(0.5f, 0.5f, 0.5f);
+        worldLight = new DirectionalLight(gl, lightColor, new Vec3(-0.2f, -1.0f, -0.3f));
+        worldLight.setCamera(camera);
 
-    room.updatePerspectiveMatrices(perspective);
-    robotHand.updatePerspectiveMatrices(perspective);
-    lamp.updatePerspectiveMatrices(perspective);
-    lamp2.updatePerspectiveMatrices(perspective);
-  }
-  
-  private void disposeMeshes(GL3 gl) {
-    dirLight.dispose(gl);
+        ArrayList<Light> lights = new ArrayList<>(Arrays.asList(worldLight));
 
-    room.disposeMeshes(gl);
-    robotHand.disposeMeshes(gl);
-    lamp.disposeMeshes(gl);
-    lamp2.disposeMeshes(gl);
-  }
+        lamp = new Lamp(gl, lights, camera);
+        lamp.setPosition(new Vec3(-4, 0, 6));
+
+        lamp2 = new Lamp(gl, lights, camera);
+        lamp2.setPosition(new Vec3(4, 0, -6));
+
+        room = new Room(gl, lights, camera);
+        robotHand = new RobotHand(gl, lights, camera);
+    }
+
+    private void render(GL3 gl) {
+        gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
+
+
+        double elapsedTime = getSeconds() - startTime;
+
+        worldLight.render(gl);
+
+        lamp.render(gl);
+        lamp2.render(gl);
+
+        room.render(gl);
+
+        if (animation) robotHand.update(elapsedTime);
+        robotHand.render(gl);
+    }
+
+    private void updatePerspectiveMatrices() {
+        // needs to be changed if user resizes the window
+        perspective = Mat4Transform.perspective(45, aspect);
+        worldLight.setPerspective(perspective);
+
+        room.updatePerspectiveMatrices(perspective);
+        robotHand.updatePerspectiveMatrices(perspective);
+        lamp.updatePerspectiveMatrices(perspective);
+        lamp2.updatePerspectiveMatrices(perspective);
+    }
+
+    private void disposeMeshes(GL3 gl) {
+        worldLight.dispose(gl);
+
+        room.disposeMeshes(gl);
+        robotHand.disposeMeshes(gl);
+        lamp.disposeMeshes(gl);
+        lamp2.disposeMeshes(gl);
+    }
 
 }

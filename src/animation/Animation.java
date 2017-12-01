@@ -1,11 +1,13 @@
 package animation;
 
+import java.util.LinkedHashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
 public class Animation {
 
     private LinkedList<KeyFrame> keyFrames;
+    private Map<Integer, Float> pauses;
     private int pos;
 
     private float step, time;
@@ -16,6 +18,7 @@ public class Animation {
         this.pos = 1; // Start moving from first to second frame initially
 
         keyFrames = new LinkedList<>();
+        pauses = new LinkedHashMap<>();
     }
 
     public void addKeyFrame(KeyFrame k) {
@@ -28,25 +31,22 @@ public class Animation {
             KeyFrame prevFrame = keyFrames.get(pos - 1);
             boolean progressFrame = true;
 
-            // Keyframes must have the same objects!
             Map<String, Position> nextFramePositions = nextFrame.getPositions();
-            Map<String, Position> prevFramePositions = prevFrame.getPositions();
 
             for (String key : nextFramePositions.keySet()) {
+                // Keyframes must have the same positions!
                 Position nextFramePosition = nextFramePositions.get(key);
-                Position prevFramePosition = prevFramePositions.get(key);
-
+                Position prevFramePosition = prevFrame.getPositions().get(key);
 
                 float prevVal = prevFramePosition.getValue();
                 float nextVal = nextFramePosition.getValue();
                 int direction = Float.compare(nextVal, prevVal);
 
-
                 if(direction != 0) {
                     float diff = nextVal - prevVal;
                     float curVal = prevVal + (diff * time + step);
 
-                    // Stop animation overshotting and continuing
+                    // Stop animation overshooting and continuing
                     if (direction < 0 && curVal < nextVal || direction > 0 && curVal > nextVal) {
                         curVal = nextVal;
                     } else {
