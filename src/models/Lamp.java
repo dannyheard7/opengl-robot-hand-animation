@@ -80,8 +80,8 @@ public class Lamp extends Model {
         lamp.update();
     }
 
-    public void render(GL3 gl) {
-        lamp.draw(gl);
+    public void render(GL3 gl, float elapsedTime) {
+        lamp.draw(gl, elapsedTime);
     }
 
     public PointLight getLight() {

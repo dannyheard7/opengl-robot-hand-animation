@@ -12,10 +12,10 @@ public class MeshNode extends SGNode {
     mesh = m; 
   }
 
-  public void draw(GL3 gl) {
-    mesh.render(gl, worldTransform);
+  public void draw(GL3 gl, float elapsedTime) {
+    mesh.render(gl, worldTransform, elapsedTime);
     for (int i=0; i<children.size(); i++) {
-      children.get(i).draw(gl);
+      children.get(i).draw(gl, elapsedTime);
     }
   }
 

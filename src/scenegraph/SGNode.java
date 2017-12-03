@@ -51,9 +51,9 @@ public class SGNode {
     }
   }
   
-  public void draw(GL3 gl) {
+  public void draw(GL3 gl, float elapsedTime) {
     for (int i=0; i<children.size(); i++) {
-      children.get(i).draw(gl);
+      children.get(i).draw(gl, elapsedTime);
     }
   }
 

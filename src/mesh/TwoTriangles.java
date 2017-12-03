@@ -7,7 +7,8 @@ import gmaths.Mat4;
 
 public class TwoTriangles extends Mesh {
   
-  private int[] textureId; 
+  private int[] textureId;
+  private boolean movingTexture = false;
 
   public TwoTriangles(GL3 gl, int[] textureId) {
     super(gl);
@@ -16,13 +17,13 @@ public class TwoTriangles extends Mesh {
     this.textureId = textureId;
     material.setAmbient(0.5f, 0.5f, 0.5f);
     material.setDiffuse(0.7f, 0.7f, 0.7f);
-    material.setSpecular(0f, 0f, 0f); // TODO: this will have specular highlights but through texturing
+    material.setSpecular(0f, 0f, 0f);
     material.setShininess(1f);
     shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt.glsl");
     fillBuffers(gl);
   }
 
-  public void render(GL3 gl, Mat4 model) { 
+  public void render(GL3 gl, Mat4 model, float elapsedTime) {
     Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(camera.getViewMatrix(), model));
     
     shader.use(gl);
@@ -46,6 +47,16 @@ public class TwoTriangles extends Mesh {
     gl.glBindVertexArray(vertexArrayId[0]);
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
     gl.glBindVertexArray(0);
+
+
+    if(movingTexture) setTextureOffset(gl, elapsedTime);
+  }
+
+  private void setTextureOffset(GL3 gl, float elapsedTime) {
+    double t = elapsedTime * 0.02;
+    float offsetX = (float) (t - Math.floor(t));
+    float offsetY = 0.0f;
+    shader.setFloat(gl, "offset", offsetX, offsetY);
   }
 
   public void dispose(GL3 gl) {
@@ -69,4 +80,7 @@ public class TwoTriangles extends Mesh {
       0, 2, 3
   };
 
+  public void setMovingTexture(boolean movingTexture) {
+    this.movingTexture = movingTexture;
+  }
 }

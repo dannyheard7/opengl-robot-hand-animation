@@ -28,13 +28,14 @@ public class Arty_GLEventListener implements GLEventListener {
     public void init(GLAutoDrawable drawable) {
         GL3 gl = drawable.getGL().getGL3();
         System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
-        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
         gl.glDepthFunc(GL.GL_LESS);
         gl.glFrontFace(GL.GL_CCW);    // default is 'CCW'
         gl.glEnable(GL.GL_CULL_FACE); // default is 'not enabled'
         gl.glCullFace(GL.GL_BACK);   // default is 'back', assuming CCW
+
 
         gl.glEnable(GL.GL_BLEND); // Enable alpha texture for window
         gl.glBlendFunc(GL.GL_SRC_ALPHA, GL.GL_ONE_MINUS_SRC_ALPHA);
@@ -162,18 +163,17 @@ public class Arty_GLEventListener implements GLEventListener {
     private void render(GL3 gl) {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
-
-        double elapsedTime = getSeconds() - startTime;
+        float elapsedTime = (float)(getSeconds() - startTime);
 
         worldLight.render(gl);
 
-        lamp.render(gl);
-        lamp2.render(gl);
+        lamp.render(gl, elapsedTime);
+        lamp2.render(gl, elapsedTime);
 
-        room.render(gl);
+        room.render(gl, elapsedTime);
 
         if (animation) robotHand.update(elapsedTime);
-        robotHand.render(gl);
+        robotHand.render(gl, elapsedTime);
     }
 
     private void updatePerspectiveMatrices() {

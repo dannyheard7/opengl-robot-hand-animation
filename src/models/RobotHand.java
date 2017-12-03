@@ -217,8 +217,8 @@ public class RobotHand extends Model {
         robot.update();
     }
 
-    public void render(GL3 gl) {
-        robot.draw(gl);
+    public void render(GL3 gl, float elapsedTime) {
+        robot.draw(gl, elapsedTime);
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

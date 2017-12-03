@@ -24,7 +24,7 @@ public class Cube extends Mesh {
         fillBuffers(gl);
     }
 
-    public void render(GL3 gl, Mat4 model) {
+    public void render(GL3 gl, Mat4 model, float elapsedTime) {
         //Mat4 model = getObjectModelMatrix();
         Mat4 mvpMatrix = Mat4.multiply(perspective, Mat4.multiply(camera.getViewMatrix(), model));
 

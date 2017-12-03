@@ -11,6 +11,8 @@ out vec2 ourTexCoord;
 uniform mat4 model;
 uniform mat4 mvpMatrix;
 
+uniform vec2 offset;
+
 void main() {
   gl_Position = mvpMatrix * vec4(position, 1.0);
   fragPos = vec3(model*vec4(position, 1.0f));
@@ -19,5 +21,5 @@ void main() {
   ourNormal = mat3(normalMatrix) * norm;
 
   //ourNormal = vec3((normalMatrix) * vec4(normal,1.0));
-  ourTexCoord = texCoord;
+  ourTexCoord = texCoord + offset;
 }

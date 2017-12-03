@@ -101,10 +101,10 @@ public abstract class Mesh {
   
   // public abstract void display(int indent);
   
-  public abstract void render(GL3 gl, Mat4 model); 
+  public abstract void render(GL3 gl, Mat4 model, float elapsedTime);
   
-  public void render(GL3 gl) {
-    render(gl, model);
+  public void render(GL3 gl, float elapsedTime) {
+    render(gl, model, elapsedTime);
   }
 
   protected void renderLights(GL3 gl) {
