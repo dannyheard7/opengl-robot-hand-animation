@@ -70,7 +70,7 @@ public class Ring extends Model {
         ring.update();
     }
 
-    public SGNode getSceneGraph() {
+    public SGNode getSceneGraphRoot() {
         return ring;
     }
 

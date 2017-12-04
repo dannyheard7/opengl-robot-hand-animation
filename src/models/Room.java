@@ -4,9 +4,9 @@ import com.jogamp.opengl.GL3;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
+import gmaths.Vec3;
 import lights.Light;
 import mesh.Camera;
-import mesh.Mesh;
 import mesh.TwoTriangles;
 import scenegraph.MeshNode;
 import scenegraph.NameNode;
@@ -18,6 +18,7 @@ import java.util.ArrayList;
 public class Room extends Model {
 
     private TwoTriangles floorMesh, wallMesh, windowWallMesh, ceilingMesh, outsideSceneMesh;
+    PictureFrame backWallPictureFrame, rightWallPictureFrame, frontWallPictureFrame;
     private SGNode room;
 
     public Room(GL3 gl, ArrayList<Light> lights, Camera camera) {
@@ -49,6 +50,18 @@ public class Room extends Model {
         outsideSceneMesh.setCamera(camera);
         outsideSceneMesh.setMovingTexture(true);
 
+        backWallPictureFrame = new PictureFrame(gl, lights, camera);
+        backWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        backWallPictureFrame.setImage(gl, "textures/hand.jpg");
+
+        rightWallPictureFrame = new PictureFrame(gl, lights, camera);
+        rightWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        rightWallPictureFrame.setImage(gl, "textures/hand2.jpg");
+
+        frontWallPictureFrame = new PictureFrame(gl, lights, camera);
+        frontWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        frontWallPictureFrame.setImage(gl, "textures/hand3.jpg");
+
         this.setupSceneGraph();
     }
 
@@ -65,41 +78,38 @@ public class Room extends Model {
         MeshNode floorShape = new MeshNode("mesh.TwoTriangles(floorMesh)", floorMesh);
 
         NameNode rightWall = new NameNode("right wall");
-        m = Mat4Transform.scale(roomWidth, roomHeight , roomDepth);
-        m = Mat4.multiply(Mat4Transform.rotateAroundZ(90), m);
+        TransformNode rightWallScale = new TransformNode("right wall scale", Mat4Transform.scale(roomWidth, roomHeight,roomDepth));
+        m = Mat4Transform.rotateAroundZ(90);
         m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m); // Get direction of texture correct
-        m = Mat4.multiply(Mat4Transform.translate(roomWidth / 2, roomHeight / 2, 0), m);
-        TransformNode rightWallTransform = new TransformNode("wall transform", m);
-        MeshNode rightWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
+        TransformNode righttWallRotate = new TransformNode("right wall rotate", m);
+        TransformNode rightWallTranslate = new TransformNode("right wall translate", Mat4Transform.translate(roomWidth / 2, roomHeight /2, 0));
+        MeshNode rightWallShape = new MeshNode("mesh.TwoTriangles(wallMesh)", wallMesh);
 
         NameNode leftWall = new NameNode("left wall");
-        m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), m);
+        TransformNode leftWallScale = new TransformNode("left wall scale", Mat4Transform.scale(roomWidth, roomHeight,roomDepth));
+        m = Mat4Transform.rotateAroundZ(-90);
         m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m);
-        m = Mat4.multiply(Mat4Transform.translate(- roomWidth / 2, roomHeight /2, 0), m);
-        TransformNode leftWallTransform = new TransformNode("wall transform", m);
+        TransformNode leftWallRotate = new TransformNode("left wall rotate", m);
+        TransformNode leftWallTranslate = new TransformNode("left wall translate", Mat4Transform.translate(-roomWidth / 2, roomHeight /2, 0));
         MeshNode leftWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", windowWallMesh);
 
         NameNode outsideScene = new NameNode("outside scene");
-        m = Mat4Transform.scale(10, 1, 6f);
-        m = Mat4.multiply(Mat4Transform.rotateAroundZ(-90), m);
-        m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m);
-        m = Mat4.multiply(Mat4Transform.translate( (-roomWidth/2)-0.01f, (roomHeight /2) + 1.15f, -0.5f), m);
-        TransformNode outsideSceneTransform = new TransformNode("outisde scene transform", m);
+        TransformNode outsideSceneTranslate = new TransformNode("outside scene translate", Mat4Transform.translate(0,  -0.1f, -1.1f));
+        TransformNode outsideSceneScale = new TransformNode("outside scene scale", Mat4Transform.scale(10, 1, 6f) );
         MeshNode outsideSceneShape = new MeshNode("mesh.TwoTriangles(outsideSceneMesh)", outsideSceneMesh);
 
         NameNode frontWall = new NameNode("front wall");
-        m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(Mat4Transform.rotateAroundX(-90), m);
-        m = Mat4.multiply(Mat4Transform.translate(0, roomHeight / 2, roomDepth /2), m);
-        TransformNode frontWallTransform = new TransformNode("wall transform", m);
+        TransformNode frontWallScale = new TransformNode("front wall scale", Mat4Transform.scale(roomWidth, roomHeight,roomDepth));
+        m = Mat4Transform.rotateAroundX(-90);
+        m = Mat4.multiply(Mat4Transform.rotateAroundZ(180), m); // rotate so it's not 'upside down'
+        TransformNode frontWallRotate = new TransformNode("front wall rotate", m);
+        TransformNode frontWallTranslate = new TransformNode("front wall translate", Mat4Transform.translate(0, roomHeight / 2, roomDepth /2));
         MeshNode frontWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode backWall = new NameNode("back wall");
-        m = Mat4Transform.scale(roomWidth, roomHeight,roomDepth);
-        m = Mat4.multiply(Mat4Transform.rotateAroundX(90), m);
-        m = Mat4.multiply(Mat4Transform.translate(0, roomHeight / 2, -roomDepth /2), m);
-        TransformNode backWallTransform = new TransformNode("wall transform", m);
+        TransformNode backWallTranslate = new TransformNode("back wall translate", Mat4Transform.translate(0, roomHeight / 2, -roomDepth /2));
+        TransformNode backWallRotate = new TransformNode("back wall rotate", Mat4Transform.rotateAroundX(90));
+        TransformNode backWallScale = new TransformNode("back wall scale", Mat4Transform.scale(roomWidth, roomHeight,roomDepth));
         MeshNode backWallShape = new MeshNode("mesh.TwoTriangles(floorMesh)", wallMesh);
 
         NameNode ceiling = new NameNode("ceiling");
@@ -109,27 +119,42 @@ public class Room extends Model {
         TransformNode ceilingTransform = new TransformNode("ceiling transform", m);
         MeshNode ceilingShape = new MeshNode("mesh.TwoTriangles(floorMesh)", ceilingMesh);
 
+
         room.addChild(floor);
             floor.addChild(floorTransform);
                 floorTransform.addChild(floorShape);
             floor.addChild(rightWall);
-                rightWall.addChild(rightWallTransform);
-                    rightWallTransform.addChild(rightWallShape);
+                rightWall.addChild(rightWallTranslate);
+                    rightWallTranslate.addChild(righttWallRotate);
+                        righttWallRotate.addChild(rightWallScale);
+                            rightWallScale.addChild(rightWallShape);
             floor.addChild(leftWall);
-                leftWall.addChild(leftWallTransform);
-                    leftWallTransform.addChild(leftWallShape);
-                leftWall.addChild(outsideScene);
-                    outsideScene.addChild(outsideSceneTransform);
-                        outsideSceneTransform.addChild(outsideSceneShape);
+                leftWall.addChild(leftWallTranslate);
+                    leftWallTranslate.addChild(leftWallRotate);
+                        leftWallRotate.addChild(outsideScene); // Have to render outside scene first to stop culling
+                            outsideScene.addChild(outsideSceneTranslate);
+                                outsideSceneTranslate.addChild(outsideSceneScale);
+                                    outsideSceneScale.addChild(outsideSceneShape);
+                        leftWallRotate.addChild(leftWallScale);
+                            leftWallScale.addChild(leftWallShape);
             floor.addChild(frontWall);
-                frontWall.addChild(frontWallTransform);
-                    frontWallTransform.addChild(frontWallShape);
+                frontWall.addChild(frontWallTranslate);
+                    frontWallTranslate.addChild(frontWallRotate);
+                        frontWallRotate.addChild(frontWallScale);
+                            frontWallScale.addChild(frontWallShape);
             floor.addChild(backWall);
-                backWall.addChild(backWallTransform);
-                    backWallTransform.addChild(backWallShape);
+                backWall.addChild(backWallTranslate);
+                    backWallTranslate.addChild(backWallRotate);
+                        backWallRotate.addChild(backWallScale);
+                            backWallScale.addChild(backWallShape);
                 backWall.addChild(ceiling);
                     ceiling.addChild(ceilingTransform);
                         ceilingTransform.addChild(ceilingShape);
+
+
+            backWallRotate.addChild(backWallPictureFrame.getSceneGraphRoot());
+            frontWallRotate.addChild(frontWallPictureFrame.getSceneGraphRoot());
+            righttWallRotate.addChild(rightWallPictureFrame.getSceneGraphRoot());
 
         room.update();
     }
@@ -145,6 +170,10 @@ public class Room extends Model {
         windowWallMesh.setPerspective(perspective);
         outsideSceneMesh.setPerspective(perspective);
         ceilingMesh.setPerspective(perspective);
+
+        backWallPictureFrame.updatePerspectiveMatrices(perspective);
+        rightWallPictureFrame.updatePerspectiveMatrices(perspective);
+        frontWallPictureFrame.updatePerspectiveMatrices(perspective);
     }
 
     public void disposeMeshes(GL3 gl) {
@@ -153,6 +182,10 @@ public class Room extends Model {
         windowWallMesh.dispose(gl);
         outsideSceneMesh.dispose(gl);
         ceilingMesh.dispose(gl);
+
+        backWallPictureFrame.disposeMeshes(gl);
+        rightWallPictureFrame.disposeMeshes(gl);
+        frontWallPictureFrame.disposeMeshes(gl);
     }
 
 }

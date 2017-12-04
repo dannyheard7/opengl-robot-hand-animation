@@ -133,7 +133,7 @@ public class RobotFinger extends Model {
     }
 
     public void addRing(Ring ring) {
-        fingerBottomJoint.addChild(ring.getSceneGraph());
+        fingerBottomJoint.addChild(ring.getSceneGraphRoot());
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

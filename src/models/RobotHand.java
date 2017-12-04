@@ -24,7 +24,7 @@ import java.util.Map;
 public class RobotHand extends Model {
 
     private Mesh handCube, armCube;
-    private SGNode robot;
+    private SGNode robotArm;
     private TransformNode handTransform;
     private Mat4 handPosition;
 
@@ -33,7 +33,6 @@ public class RobotHand extends Model {
 
     private Animation handAnim;
     private KeyFrame keyFrameNeutral, keyFrameA, keyFrameY, keyFrameH, keyFramePeace;
-
 
     public RobotHand(GL3 gl, ArrayList<Light> lights, Camera camera) {
         int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
@@ -163,7 +162,7 @@ public class RobotHand extends Model {
         float handWidth = 3f;
         float handScale = 1f;
 
-        robot = new NameNode("robot arm");
+        robotArm = new NameNode("robotArm arm");
 
         TransformNode robotArmTranslate = new TransformNode("arm translate", Mat4Transform.translate(0,0,0));
 
@@ -200,7 +199,7 @@ public class RobotHand extends Model {
 
         ringFinger.addRing(ring);
 
-        robot.addChild(robotArmTranslate);
+        robotArm.addChild(robotArmTranslate);
             robotArmTranslate.addChild(arm);
                 arm.addChild(armTransform);
                     armTransform.addChild(armShape);
@@ -214,11 +213,11 @@ public class RobotHand extends Model {
                         hand.addChild(ringFingerNode);
                         hand.addChild(pinkyFingerNode);
 
-        robot.update();
+        robotArm.update();
     }
 
     public void render(GL3 gl, float elapsedTime) {
-        robot.draw(gl, elapsedTime);
+        robotArm.draw(gl, elapsedTime);
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {
@@ -245,25 +244,29 @@ public class RobotHand extends Model {
 
     public void positionA() {
         keyFrameA.show();
+        handAnim.skipToKeyFrame(keyFrameA);
     }
 
     public void positionY() {
         keyFrameY.show();
+        handAnim.skipToKeyFrame(keyFrameY);
     }
 
     public void positionH() {
         keyFrameH.show();
+        handAnim.skipToKeyFrame(keyFrameH);
     }
 
     public void peaceGesture() {
         keyFramePeace.show();
+        handAnim.skipToKeyFrame(keyFramePeace);
     }
 
     public void rotateAroundZ(float angle) {
         Mat4 m = Mat4.multiply(handPosition, Mat4Transform.rotateAroundZ(angle));
         handTransform.setTransform(m);
 
-        robot.update();
+        robotArm.update();
     }
 
 

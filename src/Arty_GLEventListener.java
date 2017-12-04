@@ -76,17 +76,13 @@ public class Arty_GLEventListener implements GLEventListener {
     }
 
     private boolean animation = false;
-    private double savedTime = 0;
 
     public void startAnimation() {
         animation = true;
-        startTime = getSeconds() - savedTime;
     }
 
     public void stopAnimation() {
         animation = false;
-        double elapsedTime = getSeconds() - startTime;
-        savedTime = elapsedTime;
     }
 
     public void resetHand() {
@@ -96,19 +92,22 @@ public class Arty_GLEventListener implements GLEventListener {
 
     public void letterA() {
         robotHand.positionA();
-
+        animation = false;
     }
 
     public void letterY() {
         robotHand.positionY();
+        animation = false;
     }
 
     public void letterH() {
         robotHand.positionH();
+        animation = false;
     }
 
     public void peaceGesture() {
         robotHand.peaceGesture();
+        animation = false;
     }
 
     public void toggleWordLight() {
@@ -177,7 +176,6 @@ public class Arty_GLEventListener implements GLEventListener {
     }
 
     private void updatePerspectiveMatrices() {
-        // needs to be changed if user resizes the window
         perspective = Mat4Transform.perspective(45, aspect);
         worldLight.setPerspective(perspective);
 

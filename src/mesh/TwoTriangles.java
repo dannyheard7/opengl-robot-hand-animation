@@ -80,6 +80,10 @@ public class TwoTriangles extends Mesh {
       0, 2, 3
   };
 
+  public void setTextureId(int[] textureId) {
+    this.textureId = textureId;
+  }
+
   public void setMovingTexture(boolean movingTexture) {
     this.movingTexture = movingTexture;
   }

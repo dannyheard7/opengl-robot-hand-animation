@@ -70,4 +70,10 @@ public class Animation {
         this.time = 0;
     }
 
+    public void skipToKeyFrame(KeyFrame keyFrame) {
+        int index = keyFrames.indexOf(keyFrame) + 1;
+        this.pos = index;
+        this.time = 0;
+    }
+
 }

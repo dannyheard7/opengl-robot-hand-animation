@@ -140,12 +140,11 @@ void main() {
 
     result += CalcSpotLight(spotLight, norm, fragPos, viewDir);
 
-
     float alpha = 1.0;
 
     if(texture(first_texture, ourTexCoord).rg == vec2(0.0, 1.0)) { // Blue is not 0?
-        discard; // If alpha is set then the texture behind doesn't display
-        //alpha = 0.1;
+        alpha = 0.2;
+        result = vec3(0, 0, 0);
     }
 
   fragColor = vec4(result, alpha);
