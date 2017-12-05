@@ -4,12 +4,12 @@
 package models;
 
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import core.Camera;
 import mesh.TwoTriangles;
 import mesh.TwoTrianglesNoLighting;
 import scenegraph.MeshNode;
@@ -37,6 +37,7 @@ public class Room extends Model {
         floorMesh = new TwoTriangles(gl, textureId0);
         floorMesh.setLights(lights);
         floorMesh.setCamera(camera);
+        floorMesh.setSpecular(new Vec3(0.2f, 0.2f, 0.2f));
 
         wallMesh = new TwoTriangles(gl, textureId1);
         wallMesh.setLights(lights);
@@ -56,7 +57,7 @@ public class Room extends Model {
         outsideSceneMesh.setMovingTexture(true);
 
         backWallPictureFrame = new PictureFrame(gl, lights, camera);
-        backWallPictureFrame.setPosition(new Vec3(0,0.6f,-2f)); // Any closer gives z-buffer issues
+        backWallPictureFrame.setPosition(new Vec3(0,0.65f,-2f)); // Any closer gives z-buffer issues
         backWallPictureFrame.setImage(gl, "textures/hand.jpg");
 
         rightWallPictureFrame = new PictureFrame(gl, lights, camera);

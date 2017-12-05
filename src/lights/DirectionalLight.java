@@ -17,14 +17,14 @@ public class DirectionalLight extends Light {
         material.setDiffuse(0.5f, 0.5f, 0.5f);
         material.setSpecular(0, 0, 0);
 
-        this.setPosition(new Vec3(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
+        this.setPosition(new Vec3(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE)); // Directional lights are set infinitly far away
 
         this.direction = direction;
     }
 
 
     public void disable() {
-        this.currentColor = new Vec3(0.2f, 0.2f, 0.2f);
+        this.currentColor = new Vec3(0.2f, 0.2f, 0.2f); // Leave some ambient light so scene is not in total darkness
         material.setAmbient(currentColor);
         material.setDiffuse(0, 0, 0);
         material.setSpecular(0, 0, 0);

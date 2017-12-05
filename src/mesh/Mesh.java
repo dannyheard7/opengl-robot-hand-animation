@@ -9,6 +9,7 @@ import core.Camera;
 import core.Material;
 import core.Shader;
 import gmaths.Mat4;
+import gmaths.Vec3;
 import lights.DirectionalLight;
 import lights.Light;
 import lights.PointLight;
@@ -158,16 +159,17 @@ public abstract class Mesh {
     }
   }
 
-  
-  //public abstract void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
-  /*public void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {
-    setViewPosition(viewPosition);
-    setView(view);
-    setPerspective(perspective);
-    setLight(light);
-    render(gl, this.model);
+  public void setAmbient(Vec3 color) {
+    material.setAmbient(color);
   }
-  */
+
+  public void setDiffuse(Vec3 color) {
+    material.setDiffuse(color);
+  }
+
+  public void setSpecular(Vec3 color) {
+    material.setSpecular(color);
+  }
   
   
 }

@@ -4,12 +4,12 @@
 package models;
 
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import core.Camera;
 import mesh.Mesh;
 import mesh.Sphere;
 import scenegraph.MeshNode;

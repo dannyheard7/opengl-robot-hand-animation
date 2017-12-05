@@ -7,6 +7,7 @@ import com.jogamp.opengl.GL3;
 import core.Shader;
 import gmaths.Mat4;
 
+/* Same as twotriangles, but no lighting calculation are done, always have colour of texture e.g. for skybox */
 public class TwoTrianglesNoLighting extends Mesh {
 
   private int[] textureId;
@@ -22,7 +23,6 @@ public class TwoTrianglesNoLighting extends Mesh {
     material.setSpecular(0f, 0f, 0f);
     material.setShininess(1f);
 
-    // No lighting calculations, always colour of texture e.g. for skybox
     shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt_no_lighting.glsl");
     fillBuffers(gl);
   }

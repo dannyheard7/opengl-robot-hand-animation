@@ -2,8 +2,8 @@ import com.jogamp.opengl.GLCapabilities;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
-import gmaths.Vec3;
 import core.Camera;
+import gmaths.Vec3;
 
 import javax.swing.*;
 import java.awt.*;

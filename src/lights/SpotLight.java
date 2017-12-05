@@ -8,6 +8,7 @@ import gmaths.Vec3;
 
 public class SpotLight extends Light {
 
+    // Cutoff and outercutoff of define the cone of the light
     private float constant, linear, quadratic, cutOff, outerCutOff;
     private Vec3 initDirection, curDirection;
 

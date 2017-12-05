@@ -6,6 +6,7 @@ import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import core.Shader;
 import gmaths.Mat4;
+import gmaths.Vec3;
 
 public class TwoTriangles extends Mesh {
   
@@ -20,7 +21,7 @@ public class TwoTriangles extends Mesh {
     material.setAmbient(0.5f, 0.5f, 0.5f);
     material.setDiffuse(0.7f, 0.7f, 0.7f);
     material.setSpecular(0f, 0f, 0f);
-    material.setShininess(1f);
+    material.setShininess(32f);
     shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt.glsl");
     fillBuffers(gl);
   }
@@ -89,4 +90,6 @@ public class TwoTriangles extends Mesh {
   public void setMovingTexture(boolean movingTexture) {
     this.movingTexture = movingTexture;
   }
+
+
 }

@@ -8,12 +8,12 @@ import animation.Animation;
 import animation.KeyFrame;
 import animation.Position;
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import core.Camera;
 import mesh.Cube;
 import mesh.Mesh;
 import scenegraph.MeshNode;
@@ -240,27 +240,27 @@ public class RobotHand extends Model {
     }
 
     public void neutralPosition() {
-        keyFrameNeutral.show();
+        keyFrameNeutral.display();
         handAnim.reset();
     }
 
     public void positionA() {
-        keyFrameA.show();
+        keyFrameA.display();
         handAnim.skipToKeyFrame(keyFrameA);
     }
 
     public void positionY() {
-        keyFrameY.show();
+        keyFrameY.display();
         handAnim.skipToKeyFrame(keyFrameY);
     }
 
     public void positionH() {
-        keyFrameH.show();
+        keyFrameH.display();
         handAnim.skipToKeyFrame(keyFrameH);
     }
 
     public void peaceGesture() {
-        keyFramePeace.show();
+        keyFramePeace.display();
         handAnim.skipToKeyFrame(keyFramePeace);
     }
 

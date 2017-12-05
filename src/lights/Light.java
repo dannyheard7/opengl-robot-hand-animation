@@ -5,12 +5,12 @@ package lights;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
+import core.Camera;
+import core.Material;
 import core.Shader;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
-import core.Camera;
-import core.Material;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;

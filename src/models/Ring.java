@@ -4,13 +4,13 @@
 package models;
 
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
 import lights.SpotLight;
-import core.Camera;
 import mesh.Mesh;
 import mesh.Sphere;
 import scenegraph.*;
@@ -24,13 +24,15 @@ public class Ring extends Model {
 
     private SpotLight light;
 
+    private TransformNode ringTranslate;
+
     public Ring(GL3 gl, ArrayList<Light> lights, Camera camera) {
         Vec3 lightDirection = new Vec3(0, 0, -1);
-        float cutOff = (float)Math.cos(Math.toRadians(12.5f));
-        float outerCutOff = (float)Math.cos(Math.toRadians(17.5f));
+        float cutOff = (float)Math.cos(Math.toRadians(5.5f));
+        float outerCutOff = (float)Math.cos(Math.toRadians(8.5f));
 
-        Vec3 lightColor = new Vec3(0.5f, 0.5f, 1f);
-        light = new SpotLight(gl, lightColor,1.0f, 0.14f,0.07f, lightDirection, cutOff, outerCutOff);
+        Vec3 lightColor = new Vec3(0.94f, 0.25f, 0.22f);
+        light = new SpotLight(gl, lightColor,1.0f, 0.09f,0.032f, lightDirection, cutOff, outerCutOff);
         light.setCamera(camera);
         lights.add(light);
 
@@ -47,8 +49,7 @@ public class Ring extends Model {
     private void setupSceneGraph() {
         ring = new NameNode("ring");
 
-        TransformNode ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.5f,0));
-        // TODO Move the ring translate to finger class?
+        ringTranslate = new TransformNode("ring translate", Mat4Transform.translate(0,0.5f,0));
 
         NameNode band = new NameNode("band");
         Mat4 m = Mat4Transform.scale(1f, 0.2f, 1.2f);
@@ -75,6 +76,10 @@ public class Ring extends Model {
 
     public SpotLight getLight() {
         return light;
+    }
+
+    public void setPosition(Vec3 position) {
+        ringTranslate.setTransform(Mat4Transform.translate(position));
     }
 
     @Override

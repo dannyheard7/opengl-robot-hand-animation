@@ -5,7 +5,7 @@ package animation;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.function.Consumer;
+
 
 public class KeyFrame {
 
@@ -31,7 +31,9 @@ public class KeyFrame {
         return  this.positions;
     }
 
-    public void show() {
+
+    public void display() {
+        // Set all positions to their values
         for (Position position : this.positions.values()) {
             position.getPositionFunc().accept(position.getValue());
         }

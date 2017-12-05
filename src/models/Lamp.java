@@ -4,13 +4,13 @@
 package models;
 
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
 import lights.PointLight;
-import core.Camera;
 import mesh.Cube;
 import scenegraph.*;
 
@@ -61,7 +61,7 @@ public class Lamp extends Model {
         m = Mat4Transform.scale(0.5f, 0.5f, 0.5f);
         m = Mat4.multiply(Mat4Transform.translate(0, 5.25f, 0f), m);
         TransformNode lightTransform = new TransformNode("light transform", m);
-        LightNode lightShape = new LightNode("light.PointLight(lamp)", light);
+        LightNode lightShape = new LightNode("light.PointLight(lamp)", light); // Lights are part of scene graph
 
         lamp.addChild(lampTranslate);
             lampTranslate.addChild(base);
@@ -91,11 +91,13 @@ public class Lamp extends Model {
         return lamp;
     }
 
+    @Override
     public void updatePerspectiveMatrices(Mat4 perspective) {
         light.setPerspective(perspective);
         cube.setPerspective(perspective);
     }
 
+    @Override
     public void disposeMeshes(GL3 gl) {
         light.dispose(gl);
         cube.dispose(gl);

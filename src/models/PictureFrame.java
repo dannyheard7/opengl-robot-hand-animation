@@ -4,14 +4,17 @@
 package models;
 
 import com.jogamp.opengl.GL3;
+import core.Camera;
 import core.TextureLibrary;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import core.Camera;
 import mesh.TwoTriangles;
-import scenegraph.*;
+import scenegraph.MeshNode;
+import scenegraph.NameNode;
+import scenegraph.SGNode;
+import scenegraph.TransformNode;
 
 import java.util.ArrayList;
 
