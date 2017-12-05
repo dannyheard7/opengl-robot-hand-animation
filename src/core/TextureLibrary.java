@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package core;
 
 import com.jogamp.opengl.GL;

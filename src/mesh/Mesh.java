@@ -1,8 +1,12 @@
+/* Author Steve Maddock */
+
 package mesh;
 
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
+import core.Camera;
+import core.Material;
 import core.Shader;
 import gmaths.Mat4;
 import lights.DirectionalLight;
@@ -30,7 +34,7 @@ public abstract class Mesh {
   protected Shader shader;
   protected Mat4 model;
   
-  protected mesh.Camera camera;
+  protected Camera camera;
   protected Mat4 perspective;
   protected ArrayList<Light> lights;
   
@@ -43,7 +47,7 @@ public abstract class Mesh {
     model = m;
   }
   
-  public void setCamera(mesh.Camera camera) {
+  public void setCamera(Camera camera) {
     this.camera = camera;
   }
   
@@ -107,6 +111,8 @@ public abstract class Mesh {
     render(gl, model, elapsedTime);
   }
 
+  /* Author Danny Heard dheard2@sheffield.ac.uk */
+  /* Pass all lights in the scene to the shader */
   protected void renderLights(GL3 gl) {
     int numPointLights = 0;
 
@@ -119,10 +125,9 @@ public abstract class Mesh {
         shader.setVec3(gl, "dirLight.diffuse", light.getMaterial().getDiffuse());
         shader.setVec3(gl, "dirLight.specular", light.getMaterial().getSpecular());
       } else if (light instanceof PointLight) {
-        // Either do this or have one big light class? Might make more sense even though some variables are unused
         PointLight pointLight = (PointLight) light;
 
-        String name = "pointLights[" + numPointLights + "]";
+        String name = "pointLights[" + numPointLights + "]"; // Point lights is an array
 
         shader.setVec3(gl, name + ".position", pointLight.getPosition());
         shader.setVec3(gl, name + ".ambient", pointLight.getMaterial().getAmbient());
@@ -152,6 +157,7 @@ public abstract class Mesh {
       }
     }
   }
+
   
   //public abstract void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view);
   /*public void render(GL3 gl, lights.Light light, Vec3 viewPosition, Mat4 perspective, Mat4 view) {

@@ -7,12 +7,12 @@ import com.jogamp.opengl.GL3;
 import core.Shader;
 import gmaths.Mat4;
 
-public class TwoTriangles extends Mesh {
-  
+public class TwoTrianglesNoLighting extends Mesh {
+
   private int[] textureId;
   private boolean movingTexture = false;
 
-  public TwoTriangles(GL3 gl, int[] textureId) {
+  public TwoTrianglesNoLighting(GL3 gl, int[] textureId) {
     super(gl);
     super.vertices = this.vertices;
     super.indices = this.indices;
@@ -21,7 +21,9 @@ public class TwoTriangles extends Mesh {
     material.setDiffuse(0.7f, 0.7f, 0.7f);
     material.setSpecular(0f, 0f, 0f);
     material.setShininess(1f);
-    shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt.glsl");
+
+    // No lighting calculations, always colour of texture e.g. for skybox
+    shader = new Shader(gl, "shaders/vs_tt.glsl", "shaders/fs_tt_no_lighting.glsl");
     fillBuffers(gl);
   }
 

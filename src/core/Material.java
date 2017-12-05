@@ -1,9 +1,9 @@
-package mesh;
+package core;
 
 import gmaths.Vec3;
 
  /**
- * This class stores the mesh.Material properties for a mesh.Mesh
+ * This class stores the core.Material properties for a mesh.Mesh
  *
  * @author    Dr Steve Maddock
  * @version   1.0 (15/10/2017)

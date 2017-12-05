@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package models;
 
 import com.jogamp.opengl.GL3;
@@ -6,7 +9,7 @@ import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import mesh.Camera;
+import core.Camera;
 import mesh.Mesh;
 import mesh.Sphere;
 import scenegraph.MeshNode;
@@ -25,16 +28,18 @@ public class RobotFinger extends Model {
 
     private float sectionHeight, fingerWidth, fingerDepth;
 
-    public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera) {
+    public RobotFinger(GL3 gl, ArrayList<Light> lights, Camera camera, String name, Vec3 position, float sectionHeight) {
         int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
         int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
 
         sphere = new Sphere(gl, textureId3, textureId4);
         sphere.setLights(lights);
         sphere.setCamera(camera);
+
+        this.buildSceneGraph(name, position, sectionHeight);
     }
 
-    public SGNode buildSceneGraph(String name, Vec3 position, float sectionHeight) {
+    private void buildSceneGraph(String name, Vec3 position, float sectionHeight) {
         finger = new NameNode(name);
 
         this.fingerWidth = 0.75f;
@@ -85,16 +90,6 @@ public class RobotFinger extends Model {
                                 fingerTopJoint.addChild(fingerTop);
                                     fingerTop.addChild(fingerTopTransform);
                                         fingerTopTransform.addChild(fingerTopShape);
-
-
-        return finger;
-    }
-
-    public void transformFinger(Mat4 m) {
-        m = Mat4.multiply(fingerBottomJointPosition, m);
-        fingerBottomJoint.setTransform(m);
-
-        finger.update();
     }
 
     public void reset() {
@@ -133,7 +128,12 @@ public class RobotFinger extends Model {
     }
 
     public void addRing(Ring ring) {
-        fingerBottomJoint.addChild(ring.getSceneGraphRoot());
+        fingerBottomJoint.addChild(ring.getSceneGraphRootNode());
+    }
+
+    @Override
+    public SGNode getSceneGraphRootNode() {
+        return finger;
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

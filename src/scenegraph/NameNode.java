@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package scenegraph;
 
 public class NameNode extends SGNode {

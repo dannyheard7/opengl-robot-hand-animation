@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package scenegraph;
 
 import com.jogamp.opengl.GL3;

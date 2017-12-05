@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package mesh;
 
 import com.jogamp.opengl.GL;
@@ -50,6 +52,7 @@ public class Sphere extends Mesh {
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
     gl.glBindVertexArray(0);
   }
+
 
   
   public void dispose(GL3 gl) {

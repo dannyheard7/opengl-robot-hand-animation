@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package mesh;
 
 import com.jogamp.opengl.GL;

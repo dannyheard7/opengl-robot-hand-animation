@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package models;
 
 import com.jogamp.opengl.GL3;
@@ -7,16 +10,15 @@ import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
 import lights.PointLight;
-import mesh.Camera;
-import mesh.Mesh;
-import mesh.Sphere;
+import core.Camera;
+import mesh.Cube;
 import scenegraph.*;
 
 import java.util.ArrayList;
 
 public class Lamp extends Model {
 
-    private Mesh sphere;
+    private Cube cube;
     private SGNode lamp;
 
     private TransformNode lampTranslate;
@@ -26,14 +28,14 @@ public class Lamp extends Model {
         Vec3 lightColor = new Vec3(1f, 1f, 1f);
         light = new PointLight(gl, lightColor, 1.0f, 0.09f,0.032f);
         light.setCamera(camera);
-        lights.add(light); // Shallow copying, might this cause problems?
+        lights.add(light);
 
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container.jpg");
-        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/container_specular.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/dark-marble.jpg");
+        int[] textureId4 = TextureLibrary.loadTexture(gl, "textures/dark-marble_specular.jpg");
 
-        sphere = new Sphere(gl, textureId3, textureId4);
-        sphere.setLights(lights);
-        sphere.setCamera(camera);
+        cube = new Cube(gl, textureId3, textureId4);
+        cube.setLights(lights);
+        cube.setCamera(camera);
 
         this.setupSceneGraph();
     }
@@ -47,13 +49,13 @@ public class Lamp extends Model {
         Mat4 m = Mat4Transform.scale(1f, 0.2f,1f);
         m = Mat4.multiply(Mat4Transform.translate(0,0, 0), m);
         TransformNode baseTransform = new TransformNode("base transform", m);
-        MeshNode baseShape = new MeshNode("mesh.Sphere(base)", sphere);
+        MeshNode baseShape = new MeshNode("mesh.Sphere(base)", cube);
 
         NameNode tube = new NameNode("tube");
         m = Mat4Transform.scale(0.5f, 5f,0.5f);
         m = Mat4.multiply(Mat4Transform.translate(0, 2.5f,0), m);
         TransformNode tubeTransform = new TransformNode("tube transform", m);
-        MeshNode tubeShape = new MeshNode("mesh.Sphere(tube)", sphere);
+        MeshNode tubeShape = new MeshNode("mesh.Sphere(tube)", cube);
 
         NameNode lightNameNode = new NameNode("light");
         m = Mat4Transform.scale(0.5f, 0.5f, 0.5f);
@@ -80,22 +82,23 @@ public class Lamp extends Model {
         lamp.update();
     }
 
-    public void render(GL3 gl, float elapsedTime) {
-        lamp.draw(gl, elapsedTime);
-    }
-
     public PointLight getLight() {
         return light;
     }
 
+    @Override
+    public SGNode getSceneGraphRootNode() {
+        return lamp;
+    }
+
     public void updatePerspectiveMatrices(Mat4 perspective) {
         light.setPerspective(perspective);
-        sphere.setPerspective(perspective);
+        cube.setPerspective(perspective);
     }
 
     public void disposeMeshes(GL3 gl) {
         light.dispose(gl);
-        sphere.dispose(gl);
+        cube.dispose(gl);
     }
 
 }

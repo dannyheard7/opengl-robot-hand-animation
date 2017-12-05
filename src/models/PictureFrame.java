@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package models;
 
 import com.jogamp.opengl.GL3;
@@ -6,7 +9,7 @@ import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import mesh.Camera;
+import core.Camera;
 import mesh.TwoTriangles;
 import scenegraph.*;
 
@@ -73,6 +76,11 @@ public class PictureFrame extends Model {
     }
 
     @Override
+    public SGNode getSceneGraphRootNode() {
+        return picture;
+    }
+
+    @Override
     public void updatePerspectiveMatrices(Mat4 perspective) {
         frameMesh.setPerspective(perspective);
         pictureMesh.setPerspective(perspective);
@@ -84,7 +92,4 @@ public class PictureFrame extends Model {
         pictureMesh.dispose(gl);
     }
 
-    public SGNode getSceneGraphRoot() {
-        return picture;
-    }
 }

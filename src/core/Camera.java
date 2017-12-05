@@ -1,4 +1,6 @@
-package mesh;
+/* Author Steve Maddock */
+
+package core;
 
 import gmaths.Mat4;
 import gmaths.Mat4Transform;

@@ -3,7 +3,7 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.awt.GLCanvas;
 import com.jogamp.opengl.util.FPSAnimator;
 import gmaths.Vec3;
-import mesh.Camera;
+import core.Camera;
 
 import javax.swing.*;
 import java.awt.*;
@@ -45,6 +45,9 @@ public class Arty extends JFrame implements ActionListener {
       b.addActionListener(this);
       p.add(b);
       b = new JButton("Toggle Lamp 2");
+      b.addActionListener(this);
+      p.add(b);
+      b = new JButton("Toggle Spotlight");
       b.addActionListener(this);
       p.add(b);
       b = new JButton("start");
@@ -92,6 +95,9 @@ public class Arty extends JFrame implements ActionListener {
       }
       else if (e.getActionCommand().equalsIgnoreCase("Toggle Lamp 2")) {
           glEventListener.toggleLamp2();
+      }
+      else if (e.getActionCommand().equalsIgnoreCase("Toggle Spotlight")) {
+        glEventListener.toggleRingSpotlight();
       }
     else if (e.getActionCommand().equalsIgnoreCase("start")) {
       glEventListener.startAnimation();

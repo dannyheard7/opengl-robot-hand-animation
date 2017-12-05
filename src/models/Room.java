@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package models;
 
 import com.jogamp.opengl.GL3;
@@ -6,8 +9,9 @@ import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import mesh.Camera;
+import core.Camera;
 import mesh.TwoTriangles;
+import mesh.TwoTrianglesNoLighting;
 import scenegraph.MeshNode;
 import scenegraph.NameNode;
 import scenegraph.SGNode;
@@ -17,8 +21,9 @@ import java.util.ArrayList;
 
 public class Room extends Model {
 
-    private TwoTriangles floorMesh, wallMesh, windowWallMesh, ceilingMesh, outsideSceneMesh;
-    PictureFrame backWallPictureFrame, rightWallPictureFrame, frontWallPictureFrame;
+    private TwoTriangles floorMesh, wallMesh, windowWallMesh, ceilingMesh;
+    private TwoTrianglesNoLighting outsideSceneMesh;
+    private PictureFrame backWallPictureFrame, rightWallPictureFrame, frontWallPictureFrame;
     private SGNode room;
 
     public Room(GL3 gl, ArrayList<Light> lights, Camera camera) {
@@ -45,21 +50,21 @@ public class Room extends Model {
         ceilingMesh.setLights(lights);
         ceilingMesh.setCamera(camera);
 
-        outsideSceneMesh = new TwoTriangles(gl, textureId4);
+        outsideSceneMesh = new TwoTrianglesNoLighting(gl, textureId4);
         outsideSceneMesh.setLights(lights);
         outsideSceneMesh.setCamera(camera);
         outsideSceneMesh.setMovingTexture(true);
 
         backWallPictureFrame = new PictureFrame(gl, lights, camera);
-        backWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        backWallPictureFrame.setPosition(new Vec3(0,0.6f,-2f)); // Any closer gives z-buffer issues
         backWallPictureFrame.setImage(gl, "textures/hand.jpg");
 
         rightWallPictureFrame = new PictureFrame(gl, lights, camera);
-        rightWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        rightWallPictureFrame.setPosition(new Vec3(0,0.6f,-2f));
         rightWallPictureFrame.setImage(gl, "textures/hand2.jpg");
 
         frontWallPictureFrame = new PictureFrame(gl, lights, camera);
-        frontWallPictureFrame.setPosition(new Vec3(0,0.5f,-2f));
+        frontWallPictureFrame.setPosition(new Vec3(0,0.6f,-2f));
         frontWallPictureFrame.setImage(gl, "textures/hand3.jpg");
 
         this.setupSceneGraph();
@@ -152,16 +157,24 @@ public class Room extends Model {
                         ceilingTransform.addChild(ceilingShape);
 
 
-            backWallRotate.addChild(backWallPictureFrame.getSceneGraphRoot());
-            frontWallRotate.addChild(frontWallPictureFrame.getSceneGraphRoot());
-            righttWallRotate.addChild(rightWallPictureFrame.getSceneGraphRoot());
+            backWallRotate.addChild(backWallPictureFrame.getSceneGraphRootNode());
+            frontWallRotate.addChild(frontWallPictureFrame.getSceneGraphRootNode());
+            righttWallRotate.addChild(rightWallPictureFrame.getSceneGraphRootNode());
 
         room.update();
     }
 
-
     public void render(GL3 gl, float elapsedTime) {
         room.draw(gl, elapsedTime);
+    }
+
+    public void addModel(Model model) {
+        room.addChild(model.getSceneGraphRootNode());
+    }
+
+    @Override
+    public SGNode getSceneGraphRootNode() {
+        return room;
     }
 
     public void updatePerspectiveMatrices(Mat4 perspective) {

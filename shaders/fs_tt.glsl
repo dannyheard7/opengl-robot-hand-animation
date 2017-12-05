@@ -142,7 +142,7 @@ void main() {
 
     float alpha = 1.0;
 
-    if(texture(first_texture, ourTexCoord).rg == vec2(0.0, 1.0)) { // Blue is not 0?
+    if(texture(first_texture, ourTexCoord).rgb == vec3(1.0, 1.0, 1.0)) {
         alpha = 0.2;
         result = vec3(0, 0, 0);
     }

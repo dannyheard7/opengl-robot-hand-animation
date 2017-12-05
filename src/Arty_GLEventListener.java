@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 import com.jogamp.opengl.GL;
 import com.jogamp.opengl.GL3;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -7,7 +10,7 @@ import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.DirectionalLight;
 import lights.Light;
-import mesh.Camera;
+import core.Camera;
 import models.Lamp;
 import models.RobotHand;
 import models.Room;
@@ -17,7 +20,6 @@ import java.util.Arrays;
 
 public class Arty_GLEventListener implements GLEventListener {
 
-    private static final boolean DISPLAY_SHADERS = false;
     private float aspect;
 
     public Arty_GLEventListener(Camera camera) {
@@ -27,7 +29,7 @@ public class Arty_GLEventListener implements GLEventListener {
     /* Initialisation */
     public void init(GLAutoDrawable drawable) {
         GL3 gl = drawable.getGL().getGL3();
-        System.err.println("Chosen GLCapabilities: " + drawable.getChosenGLCapabilities());
+
         gl.glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
         gl.glClearDepth(1.0f);
         gl.glEnable(GL.GL_DEPTH_TEST);
@@ -65,9 +67,6 @@ public class Arty_GLEventListener implements GLEventListener {
         disposeMeshes(gl);
     }
 
-    // ***************************************************
-    /* TIME
-     */
 
     private double startTime;
 
@@ -111,24 +110,19 @@ public class Arty_GLEventListener implements GLEventListener {
     }
 
     public void toggleWordLight() {
-        if (worldLight.isEnabled())
-            worldLight.disable();
-        else
-            worldLight.enable();
+        worldLight.toggle();
     }
 
     public void toggleLamp1() {
-        if (lamp.getLight().isEnabled())
-            lamp.getLight().disable();
-        else
-            lamp.getLight().enable();
+       lamp.getLight().toggle();
     }
 
     public void toggleLamp2() {
-        if (lamp2.getLight().isEnabled())
-            lamp2.getLight().disable();
-        else
-            lamp2.getLight().enable();
+        lamp2.getLight().toggle();
+    }
+
+    public void toggleRingSpotlight() {
+        robotHand.getRing().getLight().toggle();
     }
 
 
@@ -157,22 +151,22 @@ public class Arty_GLEventListener implements GLEventListener {
 
         room = new Room(gl, lights, camera);
         robotHand = new RobotHand(gl, lights, camera);
+
+        room.addModel(lamp);
+        room.addModel(lamp2);
+        room.addModel(robotHand);
     }
 
     private void render(GL3 gl) {
         gl.glClear(GL.GL_COLOR_BUFFER_BIT | GL.GL_DEPTH_BUFFER_BIT);
 
         float elapsedTime = (float)(getSeconds() - startTime);
+        if (animation) robotHand.update(elapsedTime);
 
         worldLight.render(gl);
 
-        lamp.render(gl, elapsedTime);
-        lamp2.render(gl, elapsedTime);
-
         room.render(gl, elapsedTime);
 
-        if (animation) robotHand.update(elapsedTime);
-        robotHand.render(gl, elapsedTime);
     }
 
     private void updatePerspectiveMatrices() {

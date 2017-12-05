@@ -59,6 +59,7 @@ public class Mat4 {   // row column formulation
     return a;
   }
 
+  /* Author: Danny Heard dheard2@sheffield.ac.uk */
   /* Code to multiply transform matrix by position matrix to get transformed position */
   public static Vec4 multiply(Mat4 a, Vec4 b) {
     Vec4 result = new Vec4();

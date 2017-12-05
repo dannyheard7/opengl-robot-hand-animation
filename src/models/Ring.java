@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package models;
 
 import com.jogamp.opengl.GL3;
@@ -7,7 +10,7 @@ import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
 import lights.SpotLight;
-import mesh.Camera;
+import core.Camera;
 import mesh.Mesh;
 import mesh.Sphere;
 import scenegraph.*;
@@ -70,7 +73,12 @@ public class Ring extends Model {
         ring.update();
     }
 
-    public SGNode getSceneGraphRoot() {
+    public SpotLight getLight() {
+        return light;
+    }
+
+    @Override
+    public SGNode getSceneGraphRootNode() {
         return ring;
     }
 

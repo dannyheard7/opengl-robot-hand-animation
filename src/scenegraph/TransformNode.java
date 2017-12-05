@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package scenegraph;
 
 import gmaths.Mat4;

@@ -1,3 +1,7 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
+
 package models;
 
 import animation.Animation;
@@ -9,7 +13,7 @@ import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
 import lights.Light;
-import mesh.Camera;
+import core.Camera;
 import mesh.Cube;
 import mesh.Mesh;
 import scenegraph.MeshNode;
@@ -28,6 +32,8 @@ public class RobotHand extends Model {
     private TransformNode handTransform;
     private Mat4 handPosition;
 
+    private float handHeight, handWidth;
+
     private RobotFinger indexFinger, middleFinger, ringFinger, pinkyFinger, thumb;
     private Ring ring;
 
@@ -38,8 +44,8 @@ public class RobotHand extends Model {
         int[] textureId0 = TextureLibrary.loadTexture(gl, "textures/metal.jpg");
         int[] textureId1 = TextureLibrary.loadTexture(gl, "textures/metal_specular.jpg");
 
-        int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/container.jpg");
-        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/container_specular.jpg");
+        int[] textureId2 = TextureLibrary.loadTexture(gl, "textures/dark-marble.jpg");
+        int[] textureId3 = TextureLibrary.loadTexture(gl, "textures/dark-marble_specular.jpg");
 
         handCube = new Cube(gl, textureId0, textureId1);
         handCube.setLights(lights);
@@ -49,11 +55,21 @@ public class RobotHand extends Model {
         armCube.setLights(lights);
         armCube.setCamera(camera);
 
-        indexFinger = new RobotFinger(gl, lights, camera);
-        middleFinger = new RobotFinger(gl, lights, camera);
-        ringFinger = new RobotFinger(gl, lights, camera);
-        pinkyFinger = new RobotFinger(gl, lights, camera);
-        thumb = new RobotFinger(gl, lights, camera);
+        this.handHeight = 1.5f;
+        this.handWidth = 3f;
+
+        float dist = (handWidth - 0.5f) / 3;
+        Vec3 indexPos = new Vec3(1.25f, handHeight, 0f);
+        Vec3 middlePos = new Vec3((1.25f-dist), handHeight, 0f);
+        Vec3 ringPos = new Vec3((-1.25f+dist), handHeight, 0f);
+        Vec3 pinkyPos = new Vec3(-1.25f, handHeight, 0f);
+        Vec3 thumbPos = new Vec3(1.5f, handHeight / 2, 0f);
+
+        indexFinger = new RobotFinger(gl, lights, camera, "Index Finger", indexPos, 1f);
+        middleFinger = new RobotFinger(gl, lights, camera, "Middle Finger",  middlePos, 1.25f);
+        ringFinger = new RobotFinger(gl, lights, camera, "Ring Finger", ringPos,1f);
+        pinkyFinger = new RobotFinger(gl, lights, camera, "Pinky Finger", pinkyPos,0.75f);
+        thumb = new RobotFinger(gl, lights, camera, "Thumb", thumbPos, 0.75f);
 
         ring = new Ring(gl, lights, camera);
 
@@ -158,8 +174,6 @@ public class RobotHand extends Model {
         float armHeight = 3f;
         float armScale = 0.5f;
 
-        float handHeight = 1.5f;
-        float handWidth = 3f;
         float handScale = 1f;
 
         robotArm = new NameNode("robotArm arm");
@@ -181,20 +195,6 @@ public class RobotHand extends Model {
         TransformNode handTransform = new TransformNode("hand transform", m);
         MeshNode handShape = new MeshNode("mesh.Cube(hand)", handCube);
 
-        float dist = 2.5f  / 3;
-
-        Vec3 indexPos = new Vec3(1.25f, handHeight, 0f);
-        Vec3 middlePos = new Vec3((1.25f-dist), handHeight, 0f);
-        Vec3 ringPos = new Vec3((-1.25f+dist), handHeight, 0f);
-        Vec3 pinkyPos = new Vec3(-1.25f, handHeight, 0f);
-        Vec3 thumbPos = new Vec3(1.5f, handHeight / 2, 0f);
-
-        SGNode indexFingerNode = indexFinger.buildSceneGraph("Index Finger", indexPos, 1f);
-        SGNode middleFingerNode = middleFinger.buildSceneGraph("Middle Finger",  middlePos, 1.25f);
-        SGNode ringFingerNode = ringFinger.buildSceneGraph("models.Ring Finger", ringPos,1f);
-        SGNode pinkyFingerNode = pinkyFinger.buildSceneGraph("Pinky Finger", pinkyPos,0.75f);
-        SGNode thumbNode = thumb.buildSceneGraph("Thumb", thumbPos, 0.75f);
-
         thumb.rotateAroundZ(-90);
 
         ringFinger.addRing(ring);
@@ -207,19 +207,21 @@ public class RobotHand extends Model {
                     this.handTransform.addChild(hand);
                         hand.addChild(handTransform);
                             handTransform.addChild(handShape);
-                        hand.addChild(thumbNode);
-                        hand.addChild(indexFingerNode);
-                        hand.addChild(middleFingerNode);
-                        hand.addChild(ringFingerNode);
-                        hand.addChild(pinkyFingerNode);
+                        hand.addChild(thumb.getSceneGraphRootNode());
+                        hand.addChild(indexFinger.getSceneGraphRootNode());
+                        hand.addChild(middleFinger.getSceneGraphRootNode());
+                        hand.addChild(ringFinger.getSceneGraphRootNode());
+                        hand.addChild(pinkyFinger.getSceneGraphRootNode());
 
         robotArm.update();
     }
 
-    public void render(GL3 gl, float elapsedTime) {
-        robotArm.draw(gl, elapsedTime);
+    @Override
+    public SGNode getSceneGraphRootNode() {
+        return robotArm;
     }
 
+    @Override
     public void updatePerspectiveMatrices(Mat4 perspective) {
         handCube.setPerspective(perspective);
         armCube.setPerspective(perspective);
@@ -262,6 +264,10 @@ public class RobotHand extends Model {
         handAnim.skipToKeyFrame(keyFramePeace);
     }
 
+    public Ring getRing() {
+        return ring;
+    }
+
     public void rotateAroundZ(float angle) {
         Mat4 m = Mat4.multiply(handPosition, Mat4Transform.rotateAroundZ(angle));
         handTransform.setTransform(m);
@@ -269,7 +275,7 @@ public class RobotHand extends Model {
         robotArm.update();
     }
 
-
+    @Override
     public void disposeMeshes(GL3 gl) {
         handCube.dispose(gl);
         armCube.dispose(gl);

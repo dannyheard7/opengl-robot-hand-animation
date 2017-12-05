@@ -1,3 +1,5 @@
+/* Author Steve Maddock */
+
 package lights;
 
 import com.jogamp.common.nio.Buffers;
@@ -7,8 +9,8 @@ import core.Shader;
 import gmaths.Mat4;
 import gmaths.Mat4Transform;
 import gmaths.Vec3;
-import mesh.Camera;
-import mesh.Material;
+import core.Camera;
+import core.Material;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -17,17 +19,18 @@ abstract public class Light {
   
   protected Material material;
 
-  private Vec3 position, lightColor, cubeColor;
+  private Vec3 position, lightColor;
+  protected Vec3 currentColor;
   private Mat4 model;
   private Shader shader;
   private Camera camera;
   private Mat4 perspective;
 
-  private boolean enabled;
+  protected boolean enabled;
     
   public Light(GL3 gl, Vec3 color) {
     this.lightColor = color;
-    this.cubeColor = color;
+    this.currentColor = color;
 
     material = new Material();
     this.enable();
@@ -52,11 +55,19 @@ abstract public class Light {
     position.z = z;
   }
 
+  public void toggle() {
+      if(enabled) {
+          disable();
+      } else {
+          enable();
+      }
+  }
+
   public void disable() {
-    material.setAmbient(0, 0, 0);
-    material.setDiffuse(0, 0, 0);
-    material.setSpecular(0, 0 ,0);
-    this.cubeColor = new Vec3(0, 0, 0);
+    this.currentColor = new Vec3(0, 0, 0);
+    material.setAmbient(currentColor);
+    material.setDiffuse(currentColor);
+    material.setSpecular(currentColor);
 
     enabled = false;
   }
@@ -65,7 +76,7 @@ abstract public class Light {
     material.setAmbient(lightColor);
     material.setDiffuse(lightColor);
     material.setSpecular(lightColor);
-    this.cubeColor = lightColor;
+    this.currentColor = lightColor;
 
     enabled = true;
   }
@@ -99,7 +110,7 @@ abstract public class Light {
     
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
-    shader.setVec3(gl, "lightColor", cubeColor);
+    shader.setVec3(gl, "lightColor", currentColor);
 
     gl.glBindVertexArray(vertexArrayId[0]);
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);
@@ -111,7 +122,7 @@ abstract public class Light {
 
     shader.use(gl);
     shader.setFloatArray(gl, "mvpMatrix", mvpMatrix.toFloatArrayForGLSL());
-    shader.setVec3(gl, "lightColor", cubeColor);
+    shader.setVec3(gl, "lightColor", currentColor);
 
     gl.glBindVertexArray(vertexArrayId[0]);
     gl.glDrawElements(GL.GL_TRIANGLES, indices.length, GL.GL_UNSIGNED_INT, 0);

@@ -1,3 +1,6 @@
+/* I declare that this code is my own work */
+/* Author Danny Heard dheard2@sheffield.ac.uk */
+
 package lights;
 
 import com.jogamp.opengl.GL3;
@@ -17,6 +20,16 @@ public class DirectionalLight extends Light {
         this.setPosition(new Vec3(Float.MAX_VALUE, Float.MAX_VALUE, Float.MAX_VALUE));
 
         this.direction = direction;
+    }
+
+
+    public void disable() {
+        this.currentColor = new Vec3(0.2f, 0.2f, 0.2f);
+        material.setAmbient(currentColor);
+        material.setDiffuse(0, 0, 0);
+        material.setSpecular(0, 0, 0);
+
+        enabled = false;
     }
 
 
